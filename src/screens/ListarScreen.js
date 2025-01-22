@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { View, Text } from "react-native";
-import api from "../provider/axios";
+import cadastro from "../controllers/Cadastro";
 
 
 export default function Listar(){
@@ -8,18 +8,14 @@ export default function Listar(){
     //const [users, setUsers] = useState([]);
 
     useEffect(()=>{
-        async function loadUsers(){
-            const response = await api.get('/users');
-            console.log(response.data);
-            console.log(response.status);
-            console.log(response.statusText);
-            console.log(response.headers);
-            console.log(response.config);
-            console.log(response.request);
+        
+        cadastro.list().then(()=>
+            console.log('then ok')
+        )
 
-        }
+        
 
-        loadUsers();
+        
     }, []);
 
     return(
