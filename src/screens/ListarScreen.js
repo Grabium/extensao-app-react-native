@@ -1,17 +1,24 @@
 import React, {useEffect, useState} from "react";
-import { View, Text } from "react-native";
+import { View, Text, FlatList } from "react-native";
 import cadastro from "../controllers/Cadastro";
-
+import User from "./components/User";
+import styles from "./styles/style";
 
 export default function Listar(){
 
-    //const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState([]);
 
     useEffect(()=>{
         
-        cadastro.list().then(()=>
-            console.log('then ok')
-        )
+        cadastro.list().then((resp)=>{
+            
+            console.log('Recebendo dados do back-end...');
+            console.log(resp.msg);
+            console.log('Quantidade de dados: '+resp.dataLen);
+            console.log(resp.data);
+            
+            setUsers(resp.data);
+        })
 
         
 
@@ -19,8 +26,16 @@ export default function Listar(){
     }, []);
 
     return(
-        <View>
-            <Text>Listar foi invocado</Text>
+        <View style={styles.container}>
+            <FlatList
+                data={users}
+                keyExtractor={(item,index) => String(item.id)}
+                renderItem={({item}) => <User itemUser={item}/>}
+            />
+
+            
+
+            
         </View>
     )
 }

@@ -25,8 +25,7 @@ class Cadastro{
                 data    : data
             };
 
-            console.log('Finalizando list(). '+resp.msg);
-            //debgResp(response);
+            console.log('Finalizando list()...');
             return resp;
         
         }catch(error:any){

@@ -13,6 +13,12 @@ const styles = StyleSheet.create({
         textAlign:'center',
         fontSize:40,
         color:'green'
+    },
+
+    itemtexto:{
+        textAlign:'center',
+        fontSize:40,
+        color:'purple'
     }
 });
 
