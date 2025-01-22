@@ -1,12 +1,3 @@
-import React from "react";
-import { View, Text } from "react-native";
+import Listar from "./screens/ListarScreen";
 
-
-export default function App(){
-    return(
-        <View>
-            <Text>App foi invocado</Text>
-        </View>
-    )
-}
-
+export default Listar;
