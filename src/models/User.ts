@@ -7,6 +7,8 @@ class User extends Model{
     email:      string;
     password:   number;
     about:      string;
+    private verifyNull: string | undefined;
+    private statusEmail: boolean;
 
     constructor(
         name:       string,
@@ -26,9 +28,10 @@ class User extends Model{
         this.password = password;
         this.about    = about;
     
-        const verifyNull = this.attRequired();
-        const statusEmail = this.validarEmail();
-        console.log('Email: '+statusEmail);
+        this.verifyNull = this.validateRequireds();
+        this.statusEmail = this.validateEmail();
+        console.log('Email: '+this.statusEmail);
+        console.log('Email: '+this.verifyNull);
     }
 
     public get(){
@@ -38,6 +41,18 @@ class User extends Model{
             password: this.password,
             about:    this.about 
         }
+    }
+
+    public validation(){
+        if(typeof this.verifyNull == "string"){
+            return 'Campo: ['+this.verifyNull+'] não válido';
+        }
+
+        if(this.statusEmail == false){
+            return 'Campo: [email] não válido';
+        }
+
+        return true;
     }
     
 }

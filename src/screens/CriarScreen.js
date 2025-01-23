@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { View, Text,TextInput, Pressable, } from "react-native";
+import { View, Text,TextInput, Pressable } from "react-native";
 import styles from "./styles/style";
 import cadastro from "../controllers/Cadastro";
 import User from "../models/User";
@@ -17,8 +17,19 @@ export default function Criar(){
     function cadastrar(){
 
         const user = new User(name, email, password, about);
+        const er   = user.validation();
+        if(er !== true){
+            alert(er);
+            return;
+        }
+        
         cadastro.register(user)
-        .then(()=>{console.log('processo finalizado')})
+        .then((resp)=>{
+
+            console.log(resp.msg);
+            alert(resp.msg);
+        });
+
         
     }
 
@@ -30,14 +41,13 @@ export default function Criar(){
             
             <TextInput 
                 placeholder="Name"
-                autoCapitalize="words" 
                 onChangeText={text=>{setName(text)}}
                 value={name}
                 style={styles.textInput}
             />
 
             <TextInput 
-                placeholder="Email" 
+                placeholder="Email ex: abc@abc" 
                 inputMode="email" 
                 onChangeText={text=>{setEmail(text)}}
                 value={email}

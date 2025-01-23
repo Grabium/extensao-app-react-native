@@ -19,9 +19,12 @@ export default class Model{
         this.about    = about;
     }
 
-    public attRequired(){
-        
-        
+    /***
+     * return string    to not-validated
+     * return undefined to validated
+    ****/
+
+    public validateRequireds():string | undefined {
         let pending = this.password == 0 ? 'password' : undefined ;
         pending = this.email == '' ? 'email' : undefined ; 
         pending = this.name == '' ? 'name' : undefined ;
@@ -29,9 +32,14 @@ export default class Model{
         return pending;
      
     }
+
+    /***
+     * true = validated
+     * false = not-validated
+    ***/
     
-    public validarEmail():boolean{
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return regex.test(this.email);
+    public validateEmail():boolean{
+        const ifValid = this.email == this.name+'@'+this.name ? true : false ;
+        return ifValid;
     }
 } 
