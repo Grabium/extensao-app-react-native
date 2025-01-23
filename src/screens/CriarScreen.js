@@ -1,6 +1,8 @@
 import React, {useState} from "react";
 import { View, Text,TextInput, Pressable, } from "react-native";
 import styles from "./styles/style";
+import cadastro from "../controllers/Cadastro";
+import User from "../models/User";
 
 export default function Criar(){
 
@@ -9,8 +11,15 @@ export default function Criar(){
     const [password, setPassword] = useState('')
     const [about, setAbout] = useState('')
 
+   //fazer uso do new User(name, email, password, about) e validar na construct
+
+
     function cadastrar(){
-        console.log('cadastrar')
+
+        const user = new User(name, email, password, about);
+        cadastro.register(user)
+        .then(()=>{console.log('processo finalizado')})
+        
     }
 
 

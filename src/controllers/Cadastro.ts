@@ -1,3 +1,4 @@
+import User from "../models/User";
 import api from "../provider/axios";
 
 class Cadastro{
@@ -26,6 +27,34 @@ class Cadastro{
             };
 
             console.log('Finalizando list()...');
+            return resp;
+        
+        }catch(error:any){
+            const resp = {
+                msg    : 'Não foi possível concluir: '+error.response.data
+            };
+
+            console.log(resp.msg);
+            return resp;
+        }    
+    }
+
+    public async register(user:User){
+
+        console.log('User: ' + (user instanceof User).toString());
+        console.log('Iniciando   register()...');
+        try{
+            let response = await api.post('/users', user.get());
+            let data     = response.data.data;
+            let msg      = response.data.msg;
+            
+            let resp = {
+                msg     : 'API respondeu: \''+msg+'\'',
+                dataLen : data.length,
+                data    : data
+            };
+
+            console.log('Finalizando register()...');
             return resp;
         
         }catch(error:any){
