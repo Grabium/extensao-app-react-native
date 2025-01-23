@@ -9,6 +9,14 @@ const styles = StyleSheet.create({
         justifyContent:'center'
     },
 
+    itemContainer:{
+        flex:1,
+        alignItems:'center',
+        justifyContent:'center',
+        backgroundColor: '#ddddff',
+        margin:15
+    },
+
     text:{
         textAlign:'center',
         fontSize:40,
@@ -16,9 +24,9 @@ const styles = StyleSheet.create({
     },
 
     itemtexto:{
-        textAlign:'center',
-        fontSize:40,
-        color:'purple'
+        
+        fontSize:20,
+        color:'blue'
     }
 });
 

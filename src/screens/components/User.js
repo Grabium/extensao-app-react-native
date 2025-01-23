@@ -4,7 +4,7 @@ import styles from "../styles/style";
 function User({itemUser}){
     console.dir(itemUser)
     return(
-        <View >
+        <View style={styles.itemContainer}>
             <Text style={styles.itemtexto}>Id:.......{itemUser.id}</Text>
             <Text style={styles.itemtexto}>Nome:.....{itemUser.name}</Text>
             <Text style={styles.itemtexto}>Email:....{itemUser.email}</Text>

@@ -27,6 +27,9 @@ export default function Listar(){
 
     return(
         <View style={styles.container}>
+
+            <Text style={styles.text}>Lista de Registros</Text>
+
             <FlatList
                 data={users}
                 keyExtractor={(item,index) => String(item.id)}
