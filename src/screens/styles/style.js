@@ -29,14 +29,15 @@ const styles = StyleSheet.create({
     },
 
     textInput:{
-        height: 40, 
+        height: 65, 
         width:150,
         maxWidth: 250,
         borderColor: 'green', 
         borderWidth: 2,
         borderRadius: 10,
         backgroundColor: '#ddebee',
-        margin: 15
+        margin: 15,
+        fontSize:25
     },
 
     button:{

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-const ngrokEnd = 'https://b0ab-45-224-205-183.ngrok-free.app'
+const ngrokEnd = 'https://9c64-45-224-206-183.ngrok-free.app'
 const sufix    =  '/api'
 
 const api = axios.create({

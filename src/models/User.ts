@@ -2,13 +2,8 @@ import Model from "./Model";
 
 class User extends Model{
 
-    
-    name:       string;
-    email:      string;
-    password:   number;
-    about:      string;
-    private verifyNull: string | undefined;
-    private statusEmail: boolean;
+    private requirements: Array<any>;
+    private  statusEmail: Array<any>;
 
     constructor(
         name:       string,
@@ -28,10 +23,11 @@ class User extends Model{
         this.password = password;
         this.about    = about;
     
-        this.verifyNull = this.validateRequireds();
-        this.statusEmail = this.validateEmail();
-        console.log('Email: '+this.statusEmail);
-        console.log('Email: '+this.verifyNull);
+        this.requirements = this.validateRequireds();
+        this.statusEmail  = this.validateEmail();
+        console.log(this.requirements[1]);
+        console.log(this.statusEmail[1]);
+        
     }
 
     public get(){
@@ -44,22 +40,17 @@ class User extends Model{
     }
 
     public validation(){
-        if(typeof this.verifyNull == "string"){
-            return 'Campo: ['+this.verifyNull+'] não válido';
+        if(this.requirements[0] == false){
+            return this.requirements;
         }
 
-        if(this.statusEmail == false){
-            return 'Campo: [email] não válido';
+        if(this.statusEmail[0] == false){
+            return this.statusEmail;
         }
 
-        return true;
+        return [true];
     }
     
 }
 
 export default User;
-
-
-    
-
-    //fazer uso do new User(name, email, password, about) e validar na construct

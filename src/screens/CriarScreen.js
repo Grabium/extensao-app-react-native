@@ -11,15 +11,13 @@ export default function Criar(){
     const [password, setPassword] = useState('')
     const [about, setAbout] = useState('')
 
-   //fazer uso do new User(name, email, password, about) e validar na construct
-
-
     function cadastrar(){
 
         const user = new User(name, email, password, about);
-        const er   = user.validation();
-        if(er !== true){
-            alert(er);
+        const valid   = user.validation();
+        
+        if(valid[0] == false){
+            alert(valid[1]);
             return;
         }
         
@@ -28,6 +26,10 @@ export default function Criar(){
 
             console.log(resp.msg);
             alert(resp.msg);
+            setName('');
+            setEmail('');
+            setPassword('');
+            setAbout('');
         });
 
         
