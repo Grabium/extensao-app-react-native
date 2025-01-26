@@ -1,4 +1,4 @@
-import { View, Text, Pressable, Alert, Modal, Button } from "react-native";
+import { View, Text, Pressable, Alert, Modal, Button, TextInput } from "react-native";
 import styles from "../styles/style";
 import cadastro from "../../controllers/Cadastro";
 import { useState } from "react";
@@ -6,9 +6,11 @@ import { useState } from "react";
 
 function ItemUser({itemUser}){
     
-    const [uid, setUid ] = useState(itemUser.id);
-    const [uname, setName ] = useState(itemUser.name);
-    const [isModalVisible, setModalVisible] = useState(false);
+    const [uabout, setUabout ] = useState(itemUser.about);
+    const [uname, setUname ] = useState(itemUser.name);
+
+    const [isDelModalVisible, setDelModalVisible] = useState(false);
+    const [isUpdModalVisible, setUpdModalVisible] = useState(false);
 
     async function deletar(){
         
@@ -21,7 +23,7 @@ function ItemUser({itemUser}){
     }
 
     
-
+    
 
     return(
         <View style={styles.itemContainer}>
@@ -32,17 +34,48 @@ function ItemUser({itemUser}){
             <Modal
                 animationType="slide"
                 transparent={true}
-                visible={isModalVisible}
+                visible={isDelModalVisible}
                 
             >
                 <View style={styles.itemContainer}>
-                    <Text style={styles.itemtexto}>Deletar {uname} - {uid}?</Text>
+                    <Text style={styles.itemtexto}>Deletar {itemUser.name} - {itemUser.id}?</Text>
                     <Button title="Deletar" onPress={()=>{deletar()}} />
-                    <Button title="Não Deletar" onPress={()=>setModalVisible(false)} />
+                    <Button title="Não Deletar" onPress={()=>setDelModalVisible(false)} />
                 </View>
             </Modal>
-            <Pressable onPress={()=>setModalVisible(true)}>
+            <Pressable onPress={()=>setDelModalVisible(true)}>
                 <Text>DELETE</Text>
+            </Pressable>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isUpdModalVisible}
+                
+            >
+                <View style={styles.itemContainer}>
+                    <Text style={styles.itemtexto}>Atualizar {itemUser.name} - {itemUser.id}</Text>
+                    <TextInput 
+                        placeholder="Name"
+                        onChangeText={text=>{setUname(text)}}
+                        value={uname}
+                        style={styles.textInput}
+                    />
+
+                    <TextInput 
+                        placeholder="About"
+                        onChangeText={text=>{setUabout(text)}}
+                        value={uabout}
+                        style={styles.textInput}
+                    />
+
+                    <Button title="Atualizar FAKE" onPress={()=>setUpdModalVisible(false)} />
+                    <Button title="Cancelar" onPress={()=>setUpdModalVisible(false)} />
+                </View>
+            </Modal>
+
+            <Pressable onPress={()=>setUpdModalVisible(true)}>
+                <Text>ATUALIZAR</Text>
             </Pressable>
             
         </View>
