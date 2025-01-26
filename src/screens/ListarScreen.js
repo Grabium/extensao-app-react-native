@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
-import { View, Text, FlatList, RefreshControl, Alert } from "react-native";
+import { View, Text, FlatList, Alert } from "react-native";
 import cadastro from "../controllers/Cadastro";
-import User from "./components/User";
+import ItemUser from "./components/ItemUser";
 import styles from "./styles/style";
 
 export default function Listar(){
@@ -20,21 +20,19 @@ export default function Listar(){
             console.log('Quantidade de dados: '+resp.dataLen);
             console.log(resp.data);
             
-            setUsers(resp.data);
-            Alert.alert('Dados Carregados');
+            setUsers(resp.data);            
         });
     }
 
     useEffect(()=>{
-        
-        loadRegisters();
-        
+        onRefresh();
     }, []);
 
     const onRefresh = ()=>{
 
         setRefreshing(true);//efeito visual de carregamento
         loadRegisters();
+        Alert.alert('Dados Carregados');
         setRefreshing(false);//pára de girar.
 
     }
@@ -47,7 +45,7 @@ export default function Listar(){
             <FlatList
                 data={users}
                 keyExtractor={(item,index) => String(item.id)}
-                renderItem={({item}) => <User itemUser={item} />}
+                renderItem={({item}) => <ItemUser itemUser={item} />}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
             />

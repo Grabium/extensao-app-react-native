@@ -4,7 +4,7 @@ import cadastro from "../../controllers/Cadastro";
 import { useState } from "react";
 
 
-function User({itemUser}){
+function ItemUser({itemUser}){
     
     const [uid, setUid ] = useState(itemUser.id);
     const [uname, setName ] = useState(itemUser.name);
@@ -18,10 +18,6 @@ function User({itemUser}){
             setModalVisible(false);
             Alert.alert('Recarregue a lista puxando para baixo.', resp.msg);
         });
-        
-        
-
-        
     }
 
     
@@ -53,4 +49,4 @@ function User({itemUser}){
     )
 }
 
-export default User;
+export default ItemUser;
