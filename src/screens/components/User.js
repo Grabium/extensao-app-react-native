@@ -10,18 +10,17 @@ function User({itemUser}){
     const [uname, setName ] = useState(itemUser.name);
     const [isModalVisible, setModalVisible] = useState(false);
 
-    function deletar(){
+    async function deletar(){
         
         cadastro.exclude(uid)
         .then((resp)=>{
             console.log(resp.msg);
-            Alert.alert('Operação bem sucedida!', resp.msg);
+            setModalVisible(false);
+            Alert.alert('Recarregue a lista puxando para baixo.', resp.msg);
         });
         
-        //Alert.alert('Finge que deletou!')
-        setModalVisible(false);
+        
 
-        //recarregar a página ListarScreen
         
     }
 
@@ -42,7 +41,7 @@ function User({itemUser}){
             >
                 <View style={styles.itemContainer}>
                     <Text style={styles.itemtexto}>Deletar {uname} - {uid}?</Text>
-                    <Button title="Deletar" onPress={deletar} />
+                    <Button title="Deletar" onPress={()=>{deletar()}} />
                     <Button title="Não Deletar" onPress={()=>setModalVisible(false)} />
                 </View>
             </Modal>

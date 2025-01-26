@@ -1,23 +1,19 @@
 import React, {useEffect, useState} from "react";
-import { View, Text, FlatList, Alert } from "react-native";
+import { View, Text, FlatList, RefreshControl, Alert } from "react-native";
 import cadastro from "../controllers/Cadastro";
 import User from "./components/User";
 import styles from "./styles/style";
 
-export default function Listar(props){
+export default function Listar(){
 
+    const [refreshing, setRefreshing] = useState(false);
     const [users, setUsers] = useState([]);
 
-    useEffect(()=>{
-        
-        loadRegisters();
-        
-    }, []);
+    
 
     function loadRegisters(){
 
         cadastro.list().then((resp)=>{
-            //Alert.alert('Tela carregando');
             
             console.log('Recebendo dados do back-end...');
             console.log(resp.msg);
@@ -25,7 +21,22 @@ export default function Listar(props){
             console.log(resp.data);
             
             setUsers(resp.data);
+            Alert.alert('Dados Carregados');
         });
+    }
+
+    useEffect(()=>{
+        
+        loadRegisters();
+        
+    }, []);
+
+    const onRefresh = ()=>{
+
+        setRefreshing(true);//efeito visual de carregamento
+        loadRegisters();
+        setRefreshing(false);//pára de girar.
+
     }
 
     return(
@@ -36,7 +47,9 @@ export default function Listar(props){
             <FlatList
                 data={users}
                 keyExtractor={(item,index) => String(item.id)}
-                renderItem={({item}) => <User itemUser={item}/>}
+                renderItem={({item}) => <User itemUser={item} />}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
             />
 
             
