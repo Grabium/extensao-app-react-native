@@ -3,6 +3,7 @@ import styles from "../styles/style";
 import cadastro from "../../controllers/Cadastro";
 import { useState } from "react";
 
+
 function User({itemUser}){
     
     const [uid, setUid ] = useState(itemUser.id);
@@ -15,10 +16,16 @@ function User({itemUser}){
         .then((resp)=>{
             console.log(resp.msg);
             Alert.alert('Operação bem sucedida!', resp.msg);
-        })
+        });
+        
+        //Alert.alert('Finge que deletou!')
+        setModalVisible(false);
 
         //recarregar a página ListarScreen
+        
     }
+
+    
 
 
     return(
@@ -29,7 +36,7 @@ function User({itemUser}){
             <Text style={styles.itemtexto}>About Me:.{itemUser.about}</Text>
             <Modal
                 animationType="slide"
-                transparent={false}
+                transparent={true}
                 visible={isModalVisible}
                 
             >
