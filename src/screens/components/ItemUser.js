@@ -2,6 +2,7 @@ import { View, Text, Pressable, Alert, Modal, Button, TextInput } from "react-na
 import styles from "../styles/style";
 import cadastro from "../../controllers/Cadastro";
 import { useState } from "react";
+import User from "../../models/User";
 
 
 function ItemUser({itemUser}){
@@ -22,7 +23,19 @@ function ItemUser({itemUser}){
         });
     }
 
-    
+    function atualizar(){
+        const user = new User(uname, itemUser.email, 'sehnaFalsa', uabout);
+        console.dir(user);
+
+        cadastro.update(user, itemUser.id)
+        .then((resp)=>{
+            console.log(resp.msg);
+            setUpdModalVisible(false);
+            Alert.alert('Recarregue a lista puxando para baixo.', resp.msg);
+        });
+
+        Alert.alert('FAKE atualizar');
+    }
     
 
     return(
@@ -71,7 +84,7 @@ function ItemUser({itemUser}){
                         style={styles.textInput}
                     />
 
-                    <Button title="Atualizar FAKE" onPress={()=>setUpdModalVisible(false)} />
+                    <Button title="Atualizar FAKE" onPress={atualizar} />
                     <Button title="Cancelar" onPress={()=>setUpdModalVisible(false)} />
                 </View>
             </Modal>

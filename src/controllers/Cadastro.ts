@@ -68,6 +68,36 @@ class Cadastro{
         }    
     }
 
+    public async update(user:User, id:string){
+
+        console.log('User: ' + (user instanceof User).toString());
+        console.log('Iniciando   update()...');
+        console.log(user.get().password);
+        
+        try{
+            let response = await api.put('/users/'+id, user.get());
+            let data     = response.data.data;
+            let msg      = response.data.msg;
+            
+            let resp = {
+                msg     : 'API respondeu: \''+msg+'\'',
+                dataLen : data.length,
+                data    : data
+            };
+
+            console.log('Finalizando udate()...');
+            return resp;
+        
+        }catch(error:any){
+            const resp = {
+                msg    : 'Não foi possível concluir: '+error.response.data
+            };
+
+            console.log(resp.msg);
+            return resp;
+        }    
+    }
+
     public async exclude(id:number){
 
         console.log('id a ser excluído: '+id);
