@@ -12,12 +12,12 @@ function ItemUser({itemUser}){
     const [isDelModalVisible, setDelModalVisible] = useState(false);
     const [isUpdModalVisible, setUpdModalVisible] = useState(false);
 
-    async function deletar(){
+    function deletar(){
         
-        cadastro.exclude(uid)
+        cadastro.exclude(itemUser.id)
         .then((resp)=>{
             console.log(resp.msg);
-            setModalVisible(false);
+            setDelModalVisible(false);
             Alert.alert('Recarregue a lista puxando para baixo.', resp.msg);
         });
     }
@@ -39,7 +39,7 @@ function ItemUser({itemUser}){
             >
                 <View style={styles.itemContainer}>
                     <Text style={styles.itemtexto}>Deletar {itemUser.name} - {itemUser.id}?</Text>
-                    <Button title="Deletar" onPress={()=>{deletar()}} />
+                    <Button title="Deletar" onPress={deletar} />
                     <Button title="Não Deletar" onPress={()=>setDelModalVisible(false)} />
                 </View>
             </Modal>
@@ -54,7 +54,9 @@ function ItemUser({itemUser}){
                 
             >
                 <View style={styles.itemContainer}>
+                    
                     <Text style={styles.itemtexto}>Atualizar {itemUser.name} - {itemUser.id}</Text>
+                    
                     <TextInput 
                         placeholder="Name"
                         onChangeText={text=>{setUname(text)}}
