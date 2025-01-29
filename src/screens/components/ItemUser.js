@@ -25,7 +25,6 @@ function ItemUser({itemUser}){
 
     function atualizar(){
         const user = new User(uname, itemUser.email, 'sehnaFalsa', uabout);
-        console.dir(user);
 
         cadastro.update(user, itemUser.id)
         .then((resp)=>{
@@ -33,8 +32,6 @@ function ItemUser({itemUser}){
             setUpdModalVisible(false);
             Alert.alert('Recarregue a lista puxando para baixo.', resp.msg);
         });
-
-        Alert.alert('FAKE atualizar');
     }
     
 

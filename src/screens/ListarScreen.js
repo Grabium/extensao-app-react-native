@@ -8,10 +8,11 @@ export default function Listar(){
 
     const [refreshing, setRefreshing] = useState(false);
     const [users, setUsers] = useState([]);
+    const [loaded, setLoaded] = useState(false);
 
     
 
-    function loadRegisters(){
+    async function loadRegisters(){
 
         cadastro.list().then((resp)=>{
             
@@ -20,21 +21,27 @@ export default function Listar(){
             console.log('Quantidade de dados: '+resp.dataLen);
             console.log(resp.data);
             
-            setUsers(resp.data);            
+            setUsers(resp.data);     
+            setLoaded(true);
+            
         });
+
     }
 
     useEffect(()=>{
         onRefresh();
     }, []);
 
-    const onRefresh = ()=>{
+    const onRefresh = async ()=>{
 
         setRefreshing(true);//efeito visual de carregamento
-        loadRegisters();
-        Alert.alert('Dados Carregados');
-        setRefreshing(false);//pára de girar.
+        await loadRegisters();
+        setRefreshing(false);//para de girar.
 
+        if(loaded == true){
+            Alert.alert('Dados Carregados');
+            setLoaded(false);
+        }
     }
 
     return(
