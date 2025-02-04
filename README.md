@@ -10,7 +10,7 @@ REST (Representational State Transfer), é um __modelo de arquitetura__ [fonte: 
 
 **Estrutura de uma Requisição HTTP:**
 
-Uma requisição HTTP é composta por:
+Vejamos a composição de uma requisição HTTP:
 
 *   **Linha Inicial (Start Line):** Contém o método HTTP (GET, POST, PUT, DELETE, etc.), a versão do HTTP e o endpoint (URL) do recurso desejado.
 *   **Cabeçalho (Headers):** Contém metadados sobre a requisição, como o tipo de conteúdo do corpo, informações sobre o agente cliente e de autenticação.
@@ -60,10 +60,10 @@ Host: api.exemplo.com
 
 **Cabeçalhos Comuns:**
 
-*   `Content-Type`: Indica o tipo de conteúdo do corpo da requisição (ex: `application/json`, `application/xml`).
-*   `Accept`: Indica os tipos de conteúdo que o cliente aceita na resposta (ex: `application/json`, `*/*`).
-*   `Authorization`: Contém informações de autenticação (ex: `Bearer <token>`).
-*   `User-Agent`: Identifica o agente do usuário (navegador, aplicativo, etc.).
+*   `Content-Type`: Indica qual sintaxe compatível com o conteúdo, o 'data', do corpo da requisição (ex: `application/json`, `application/xml`).
+*   `Accept`: Da mesma forma é necessário indicar qual o formato/sintaxe de conteúdo o cliente aceita no corpo da resposta (ex: `application/json`, `*/*`).
+*   `Authorization`: Contém a chave criptografada que portege a API, fornecida pela API já com a autorização (ex: `Bearer <token>`). Veremos mais a frente detalhes sobre isso.
+*   `User-Agent`: Identifica o agente cliente (navegador, aplicativo, etc.).
 
 **Corpo da Requisição:**
 
