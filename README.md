@@ -1,12 +1,12 @@
 ## Conexão Remota com React Native: Um Guia Abrangente Utilizando Fetch e Axios
 
-É muito difícil que qualquer aplicativo desenvolvido atualmente não fazer ao menos uma requisição a um serviço web. Muito comumente fará um login ou consumirá uma API para qualquer outro serviço. Seja para exibir dados dinâmicos, autenticar usuários ou interagir com APIs complexas, a capacidade de realizar requisições HTTP de forma robusta e otimizada é crucial.
+É muito difícil qualquer aplicativo desenvolvido atualmente não fazer ao menos uma requisição a um serviço web. Muito comumente fará um login ou consumirá uma API para qualquer outro serviço. A exemplo temos: IoT, jogos, check-outs, transmissões ao vivo, sites, chats, e-mails e outros.
 
-Este guia detalhado explora as duas principais ferramentas para conexão remota no React Native: a API Fetch, nativa do JavaScript, e a biblioteca Axios, uma alternativa popular com funcionalidades avançadas. Abordaremos desde os conceitos básicos até técnicas avançadas, com exemplos práticos e explicações aprofundadas sobre arquitetura REST, tratamento de respostas, configuração de requisições, autenticação e muito mais.
+Vamos explorar as duas principais ferramentas para conexão remota no React Native: a API Fetch, nativa do JavaScript, e a biblioteca Axios, bastante popular e avançada. Abordaremos desde os conceitos básicos até técnicas avançadas, com exemplos práticos e explicações aprofundadas sobre arquitetura REST, tratamento de respostas, configuração de requisições, autenticação e muito mais.
 
 ### Parte 1: Introdução à Arquitetura REST
 
-A arquitetura REST (Representational State Transfer) é um paradigma de design para APIs que utiliza os métodos HTTP de forma padronizada para interagir com recursos. Compreender os princípios REST é essencial para construir aplicações escaláveis e manuteníveis.
+REST (Representational State Transfer), é um __modelo de arquitetura__ [fonte: Alura.com](https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.alura.com.br/artigos/rest-conceito-e-fundamentos%3Fsrsltid%3DAfmBOor8xew8POcdYEINNOkfnoZv2KXsuFY7XSlCDiEQ2UOYL2JUzN1o&ved=2ahUKEwj87_iqzKqLAxXXqZUCHQ8uPTQQFnoECDwQAQ&authuser=1&usg=AOvVaw3qttAfWLTQV3KhSN7o-165) para APIs remotas que utilizam o protocolo de comunicação HTTP. Este modelo propõe um padrão bem aceito pelo mercado. Entender estes princípios é essencial para desenvolver aplicações escaláveis e manuteníveis.
 
 **Estrutura de uma Requisição HTTP:**
 
