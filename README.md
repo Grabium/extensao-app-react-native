@@ -1,6 +1,6 @@
 ## Conexão Remota com React Native: Um Guia Abrangente Utilizando Fetch e Axios
 
-A comunicação eficiente com servidores remotos é um pilar fundamental no desenvolvimento de aplicativos React Native modernos. Seja para exibir dados dinâmicos, autenticar usuários ou interagir com APIs complexas, a capacidade de realizar requisições HTTP de forma robusta e otimizada é crucial.
+É muito difícil que qualquer aplicativo desenvolvido atualmente não fazer ao menos uma requisição a um serviço web. Muito comumente fará um login ou consumirá uma API para qualquer outro serviço. Seja para exibir dados dinâmicos, autenticar usuários ou interagir com APIs complexas, a capacidade de realizar requisições HTTP de forma robusta e otimizada é crucial.
 
 Este guia detalhado explora as duas principais ferramentas para conexão remota no React Native: a API Fetch, nativa do JavaScript, e a biblioteca Axios, uma alternativa popular com funcionalidades avançadas. Abordaremos desde os conceitos básicos até técnicas avançadas, com exemplos práticos e explicações aprofundadas sobre arquitetura REST, tratamento de respostas, configuração de requisições, autenticação e muito mais.
 
