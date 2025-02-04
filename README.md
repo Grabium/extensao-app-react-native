@@ -97,6 +97,7 @@ O servidor responde à requisição com um código de status indicando o andamen
 ### Parte 2: Exemplos com Fetch e Axios
 
 **Sintaxe da requisição Fetch**
+
 ```javascript
 let promise = fetch(url, [options])
 ```
@@ -120,7 +121,9 @@ fetch('https://api.exemplo.com/dados', {
   // Lida com erros
 });
 ```
-Quando não é definido o __method__, automaticamente, fetch envia uma requisição GET. É possível, e comum, enviar a requisição sem o parÂmetro __options__.
+
+Quando não é definido o __method__, automaticamente, fetch envia uma requisição GET. É possível, e comum, enviar a requisição sem o 2° parâmetro, o __options__.
+
 ```javascript
 fetch('https://api.exemplo.com/usuarios')
   .then(response => response.json())
