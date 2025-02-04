@@ -96,10 +96,31 @@ O servidor responde à requisição com um código de status indicando o andamen
 
 ### Parte 2: Exemplos com Fetch e Axios
 
+**Sintaxe da requisição Fetch**
+```javascript
+let promise = fetch(url, [options])
+```
+
 **1° Bloco: Exemplos com Fetch:**
 
 **GET:**
 
+```javascript
+fetch('https://api.exemplo.com/dados', {
+  method: 'GET',
+  headers: {
+    'X-Custom-Header': 'valor-do-meu-cabecalho',
+    'Authorization': 'Bearer seu-token-de-acesso'
+  }
+})
+.then(response => {
+  // Lida com a resposta do servidor
+})
+.catch(error => {
+  // Lida com erros
+});
+```
+Quando não é definido o __method__, automaticamente, fetch envia uma requisição GET. É possível, e comum, enviar a requisição sem o parÂmetro __options__.
 ```javascript
 fetch('https://api.exemplo.com/usuarios')
   .then(response => response.json())
