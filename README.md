@@ -12,9 +12,9 @@ REST (Representational State Transfer), é um __modelo de arquitetura__ [fonte: 
 
 Uma requisição HTTP é composta por:
 
-*   **Linha Inicial:** Contém o método HTTP (GET, POST, PUT, DELETE, etc.) e o endpoint (URL) do recurso desejado.
-*   **Cabeçalho (Headers):** Contém metadados sobre a requisição, como o tipo de conteúdo, o agente do usuário e informações de autenticação.
-*   **Corpo (Body):** Contém os dados a serem enviados para o servidor (opcional, usado em requisições POST, PUT, etc.).
+*   **Linha Inicial (Start Line):** Contém o método HTTP (GET, POST, PUT, DELETE, etc.), a versão do HTTP e o endpoint (URL) do recurso desejado.
+*   **Cabeçalho (Headers):** Contém metadados sobre a requisição, como o tipo de conteúdo do corpo, informações sobre o agente cliente e de autenticação.
+*   **Corpo (Body):** Contém dados a serem enviados para o servidor. É restrito a alguns métodos. Retorna um erro caso haja uma tentativa de envio ou definição com um método inadequado.
 
 **Exemplos de Estruturas de Requisições:**
 
