@@ -67,14 +67,16 @@ Host: api.exemplo.com
 
 **Corpo da Requisição:**
 
-O corpo da requisição contém os dados a serem enviados para o servidor. Os formatos mais comuns são:
+O corpo da requisição contém os dados a serem enviados para o servidor. Os formatos largamente acitos pelo mercado são:
 
 *   **JSON (JavaScript Object Notation):** Formato leve e amplamente utilizado para troca de dados.
 *   **XML (Extensible Markup Language):** Formato mais complexo e estruturado, utilizado em aplicações legadas ou que exigem maior formalismo.
 
+JSON, como sugere o nome, para quem já conhece a linguagem de programação javascript, é praticamente a sintaxe um objeto literal dentro de um texto. O XML, se assemelha bastante ao HTML. É verboso e customisável. 
+
 **Códigos de Status de Resposta:**
 
-O servidor responde à requisição com um código de status, indicando o resultado da operação:
+O servidor responde à requisição com um código de status, indicando o o andamento do processamento. Com isso é possível definir comportamentos para a aplicação, __considerando que esta suporta o processo assíncrono de requisição e resposta__, muito empregado para desenvolver telas de loadding ou carregamento de uma parte, componente, da tela :
 
 *   **2xx (Sucesso):**
     *   200 (OK): Requisição bem-sucedida.
