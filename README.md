@@ -76,7 +76,7 @@ JSON, como sugere o nome, para quem já conhece a linguagem de programação jav
 
 **Códigos de Status de Resposta:**
 
-O servidor responde à requisição com um código de status, indicando o o andamento do processamento. Com isso é possível definir comportamentos para a aplicação, __considerando que esta suporta o processo assíncrono de requisição e resposta__, muito empregado para desenvolver telas de loadding ou carregamento de uma parte, componente, da tela :
+O servidor responde à requisição com um código de status indicando o andamento do processamento. Com isso é possível definir comportamentos para a aplicação, __considerando que esta suporta o processo assíncrono de requisição e resposta__, muito empregado para desenvolver telas de loadding ou carregamento de uma parte, componente, da tela :
 
 *   **2xx (Sucesso):**
     *   200 (OK): Requisição bem-sucedida.
