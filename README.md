@@ -225,7 +225,7 @@ Este guia detalhado explora as duas principais ferramentas para conexão remota 
 
 ### Parte 3: Exportando uma Instância Axios com o Mínimo de Configuração
 
-Para facilitar o uso do Axios em toda a aplicação, você pode criar uma instância personalizada com configurações básicas, evitando repetição de código e centralizando as configurações:
+Instanciar um objeto 'aleatoriamente' gera uma certa complexidade, em questão de desempenho, no sistema. É muito comum concentrar a instância do axios, ou qualquer API ou módulo, para que possa ser exportada e consumida em outros pontos, de forma controlada. Gerando dessa forma, evitamos a repetição desnecessária do código. No exemplo a seguir, definimos configurações que serão usadas em todas as requisições:
 
 ```javascript
 import axios from 'axios';
@@ -237,6 +237,8 @@ const api = axios.create({
 
 export default api;
 ```
+
+
 
 **Explicação:**
 
