@@ -104,15 +104,19 @@ Host: api.exemplo.com
 *   `Accept`: Da mesma forma é necessário indicar qual o formato/sintaxe de conteúdo o cliente aceita no corpo da resposta (ex: `application/json`, `*/*`).
 *   `Authorization`: Contém a chave criptografada que portege a API, fornecida pela API já com a autorização (ex: `Bearer <token>`). Veremos mais a frente detalhes sobre isso.
 *   `User-Agent`: Identifica o agente cliente (navegador, aplicativo, etc.).
+*   `Cookie`: informa detalhes sobre o cookies armazenados.
 
 **Corpo da Requisição:**
 
 O corpo da requisição contém os dados a serem enviados para o servidor. Os formatos largamente acitos pelo mercado são:
 
-*   **JSON (JavaScript Object Notation):** Formato leve e amplamente utilizado para troca de dados.
-*   **XML (Extensible Markup Language):** Formato mais complexo e estruturado, utilizado em aplicações legadas ou que exigem maior formalismo.
+*   **Formulário (application/x-www-form-urlencoded):** No cURL possui uma sintaxe igrual a uma query vista em GET: __nome=Anacleto&idade=41&cidade=Recife__
+*   **JSON (application/json):** Formato leve e amplamente utilizado para troca de dados.
+*   **XML (application/xml):** Formato mais complexo e estruturado, utilizado em aplicações legadas ou que exigem maior formalismo.
+*   **Texto Simples (text/plain):** Útil para disparar qualquer processamento que vai além dos verbos explanados acima ou serielizar dados.
+*   **Dados Binários (application/octet-stream):** Conhecidos como Blob (Binary Large Object). São arquivos como imagem, vídeos, áudio, etc.
 
-JSON, como sugere o nome, para quem já conhece a linguagem de programação javascript, é praticamente a sintaxe um objeto literal dentro de um texto. O XML, se assemelha bastante ao HTML. É verboso e customisável. 
+JSON (JavaScrip Object Notation), como sugere o nome e, para quem já conhece a linguagem de programação javascript, é praticamente a sintaxe um objeto literal dentro de um texto (em temo abrasileirado, um objeto "stringuificado"). O XML, se assemelha bastante ao HTML. É verboso e customisável. 
 
 **Códigos de Status de Resposta:**
 
