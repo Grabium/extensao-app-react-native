@@ -169,13 +169,52 @@ fetch('https://api.exemplo.com/usuarios/1', { method: 'DELETE' })
 
 **GET:**
 
+GET para listar todos os usuários de uma tabela, por exemplo:
+
 ```javascript
 axios.get('https://api.exemplo.com/usuarios')
   .then(response => console.log(response.data))
   .catch(error => console.error(error));
 ```
 
+GET mesmo não tendo corpo pode enviar informações. Abaixo, Uma requisição GET busca o recurso '/usuario', mas diferente do exemplo anterior, esta requisição busca especificamente o usuário de ID n°5.
+
+```javascript
+axios.get('https://api.exemplo.com/usuarios/5')
+  .then(response => console.log(response.data))
+  .catch(error => console.error(error));
+```
+GET com query, caso o serviço consumido permita, faz uma filtragem. Observe a sintaxe que busca usuários ativos, no contrato de n° 56 e cadastro em 2009. É claro que, num sistema real, onde busca-se o dinamismo, esta string da uri seria composta por algumas variáveis nos valores da query, e não uma string constante.
+
+```javascript
+axios.get('https://api.exemplo.com/usuarios?status=ativo&contrato=56&cadastro=2009')
+  .then(response => {
+    // Lógica para lidar com a resposta da API
+  })
+  .catch(error => {
+    // Lógica para lidar com erros na requisição
+  });
+```
+O exemplo anterior é equivalente ao próximo. Este, tem uma sintaxe mais concisa. Inclusive a questão da dinâmica conta aqui também. Vejamos:
+
+```javascript
+axios.get('https://api.exemplo.com/usuarios', {
+  params: {
+    status: 'ativo',
+    contrato: 56,
+    cadastro: 2009
+  }
+})
+  .then(response => {
+    // Lógica para lidar com a resposta da API
+  })
+  .catch(error => {
+    // Lógica para lidar com erros na requisição
+  });
+```
 **POST:**
+
+Já deixamos claro a diferença entre data e query numa requisição. Esta é enviada junto à uri, e aquela é o que compõe o corpo da requisição e que é restrito a alguns verbos.
 
 ```javascript
 axios.post('https://api.exemplo.com/usuarios', { nome: 'Novo Usuário' })
