@@ -27,7 +27,7 @@ GET /usuarios HTTP/1.1
 Host: api.lib.com/
 ```
 
-Listar livros desta loja:
+Listar todos os livros desta biblioteca:
 
 ```
 GET /usuarios HTTP/1.1
