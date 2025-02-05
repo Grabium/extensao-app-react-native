@@ -18,7 +18,9 @@ Vejamos a composição de uma requisição HTTP:
 
 **Exemplos de Estruturas de Requisições:**
 
-**GET /books:**
+Os exemplos abaixo são represnetações de requisições ainda independente de linguagem de programação ou qualquer ferramenta de desenvolvimento. Vale resaltar que antes de confeccionar uma aplicação cliente que vá consumir uma API, estuda-se a documentação dessa determinada API. Os exemplos são baseados numa API fictícia que hipoteticamente __instrui o desenvolvedor da aplicação cliente a construir as requisições exatamente com essas possibilidades__. Ou seja, é requisitado somente o que o sistema pode responder. Mas essas possibilidades não são aleatórias. São padronizadas de acordo com a, mensionada anteriormente, arquitetura REST.
+
+**GET Buscar:**
 
 Home page de um site. Uma biblioteca:
 
@@ -55,11 +57,13 @@ GET /usuarios HTTP/1.1
 Host: api.lib.com/books?launch=^2024&lang=Pt-br
 ```
 
-**POST /usuarios:**
+**POST Criar:**
+
+Requisição com caráter de alterar o sistema. Comumente usado para criar um novo registro no sistema. Os dados no corpo, podendo ser um json, xml ou até conter um binário contendo um audio, imagem, vídeo e outros, viajam de forma mais segura que os parâmetros enviados na uri. Em comunicação onde a segurança é um requisito prioritário esses dados ainda viajam criptografados. Veremos mais a frente sobre isso. Veja uma requisição POST com um .json no corpo. O endpoint é '/usuário' e quando o servidor verifica o verbo, que é POST, direciona para a funcionalidade de criar um novo usuário:
 
 ```
 POST /usuarios HTTP/1.1
-Host: api.exemplo.com
+Host: api.exemplo.com/
 Content-Type: application/json
 
 {
@@ -68,11 +72,13 @@ Content-Type: application/json
 }
 ```
 
-**PUT /usuarios/1:**
+**PUT Atualizar:**
+
+Frequentemente uma requisição PUT é usada para atualizar um registro. Perceba que o endpoint ainda é '/usuário', mas há dois detalhes novos. O verbo é PUT, então o servidor direciona os dados recebidos no corpo para a funcionalidade de atualizar um usuário de acordo com os dados. E, semelhante ao que vimos no GET, há um parâmetro '/34' que identifica qual registro será atualizado.
 
 ```
-PUT /usuarios/1 HTTP/1.1
-Host: api.exemplo.com
+PUT /usuarios/34 HTTP/1.1
+Host: api.exemplo.com/
 Content-Type: application/xml
 
 <usuario>
@@ -81,10 +87,14 @@ Content-Type: application/xml
 </usuario>
 ```
 
-**DELETE /usuarios/1:**
+Você deve ter notado o corpo em __xml__. Poderia ser __json__. Foi só para mostrar como seria.
+
+**DELETE deletar:**
+
+Sem corpo, o parâmetro na uri indica qual registro usuário será deletado. Mesmo sendo o mesmo end-point o verbo enviado ao servidor indicará a ação a ser executada.
 
 ```
-DELETE /usuarios/1 HTTP/1.1
+DELETE /usuarios/34 HTTP/1.1
 Host: api.exemplo.com
 ```
 
