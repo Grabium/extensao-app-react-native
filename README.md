@@ -40,11 +40,19 @@ GET com 1 parâmetro. um ISBN-_International Standard Book Number_ fictício de 
 GET /usuarios HTTP/1.1
 Host: api.loja.com/books/851598524568523
 ```
+
 GET com 2 parâmetros. Neste caso volta a receber uma lista de livros. Livros lançados depois de 2024 e em poruguês.
 
 ```
 GET /usuarios HTTP/1.1
 Host: api.loja.com/books/^2024/Pt-br
+```
+
+GET com os parâmetros nomeados. Então chamamos de __query__. Produz resultado equivalente à requisição anterior. Não deve ser confundida com uma requisição com corpo. Não deve ser utilizada para alterar o estado do sistema se a API segue os padrões REST.
+
+```
+GET /usuarios HTTP/1.1
+Host: api.loja.com/books?launch=^2024&lang=Pt-br
 ```
 
 **POST /usuarios:**
