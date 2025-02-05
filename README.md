@@ -18,7 +18,7 @@ Vejamos a composição de uma requisição HTTP:
 
 **Exemplos de Estruturas de Requisições:**
 
-**GET /usuarios:**
+**GET /books:**
 
 Home page de uma site:
 
