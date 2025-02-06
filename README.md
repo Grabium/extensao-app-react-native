@@ -22,39 +22,41 @@ Os exemplos abaixo são represnetações de requisições ainda independente de 
 
 **GET Buscar:**
 
-Home page de um site. Uma biblioteca:
+É possível encontrar servidores de API que possuem apenas uma ação em sua interface. Necessitando apenas de um único end-point bastante simples. Na verdade, é muito mais comum em blogs ou sites Single-page. Mas voltemos ao fato que estamos nos conectando para consumir serviços de API.
+
+Este poderia ser o caso citado acima:
 
 ```
 GET /usuarios HTTP/1.1
-Host: api.lib.com/api/
+Host: lib.com/api/
 ```
 
 Listar todos os livros desta biblioteca:
 
 ```
 GET /usuarios HTTP/1.1
-Host: api.lib.com/api/books
+Host: lib.com/api/books
 ```
 
 GET com 1 parâmetro. um ISBN-_International Standard Book Number_ fictício de um livro que retorna apenas um livro específico:
 
 ```
 GET /usuarios HTTP/1.1
-Host: api.lib.com/api/books/851598524568523
+Host: lib.com/api/books/851598524568523
 ```
 
 GET com 2 parâmetros. Neste caso volta a receber uma lista de livros. Livros lançados depois de 2024 e em poruguês.
 
 ```
 GET /usuarios HTTP/1.1
-Host: api.lib.com/api/books/^2024/Pt-br
+Host: lib.com/api/books/^2024/Pt-br
 ```
 
 GET com os parâmetros nomeados. Então chamamos de __query__. Produz resultado equivalente à requisição anterior. Não deve ser confundida com uma requisição com corpo. Não deve ser utilizada para alterar o estado do sistema se a API segue os padrões REST.
 
 ```
 GET /usuarios HTTP/1.1
-Host: api.lib.com/api/books?launch=^2024&lang=Pt-br
+Host: lib.com/api/books?launch=^2024&lang=Pt-br
 ```
 
 **POST Criar:**
@@ -63,7 +65,7 @@ Requisição com caráter de alterar o sistema. Comumente usado para criar um no
 
 ```
 POST /usuarios HTTP/1.1
-Host: api.exemplo.com/api/
+Host: exemplo.com/api/
 Content-Type: application/json
 
 {
@@ -78,7 +80,7 @@ Frequentemente uma requisição PUT é usada para atualizar um registro. Perceba
 
 ```
 PUT /usuarios/34 HTTP/1.1
-Host: api.exemplo.com/api/
+Host: exemplo.com/api/
 Content-Type: application/xml
 
 <usuario>
@@ -95,7 +97,7 @@ Sem corpo, o parâmetro na uri indica qual registro usuário será deletado. Mes
 
 ```
 DELETE /usuarios/34 HTTP/1.1
-Host: api.exemplo.com/api/
+Host: exemplo.com/api/
 ```
 
 **Cabeçalhos Comuns:**
@@ -151,11 +153,10 @@ let promise = fetch(url, [options])
 **GET:**
 
 ```javascript
-fetch('https://api.exemplo.com/api/dados', {
+fetch('https://exemplo.com/api/dados', {
   method: 'GET',
   headers: {
     'X-Custom-Header': 'valor-do-meu-cabecalho',
-    'Authorization': 'Bearer seu-token-de-acesso'
   }
 })
 .then(response => {
@@ -169,16 +170,55 @@ fetch('https://api.exemplo.com/api/dados', {
 Quando não é definido o __method__, automaticamente, fetch envia uma requisição GET. É possível, e comum, enviar a requisição sem o 2° parâmetro, o __options__.
 
 ```javascript
-fetch('https://api.exemplo.com/api/usuarios')
+fetch('https://exemplo.com/api/usuarios')
   .then(response => response.json())
   .then(data => console.log(data))
   .catch(error => console.error(error));
 ```
 
+Vejamos mais exemplos GET. Desta vez seguindo o contexto da api de livraria das requisições no título __GET Buscar__:
+
+Requisição comum em API com apenas uma funcionalidade:
+```javascript 
+fetch('https://lib.com/api')
+  .then(response => response.json())
+  .then(data => console.log(data));
+```
+
+Listar todos os livros desta biblioteca:
+```javascript 
+fetch('https://lib.com/api/books')
+  .then(response => response.json())
+  .then(data => console.log(data));
+```
+
+GET com 1 parâmetro. Um ISBN fictício de um livro que retorna apenas um livro específico:
+```javascript 
+fetch('https://lib.com/api/books/851598524568523')
+  .then(response => response.json())
+  .then(data => console.log(data));
+```
+
+GET com 2 parâmetros. Livros lançados depois de 2024 e em português:
+```javascript 
+fetch('https://lib.com/api/books/^2024/Pt-br')
+  .then(response => response.json())
+  .then(data => console.log(data));
+```
+
+GET com os parâmetros nomeados (query).
+```javascript 
+fetch('https://lib.com/api/books?launch=^2024&lang=Pt-br')
+  .then(response => response.json())
+  .then(data => console.log(data));
+```
+
+
 **POST:**
 
+Agora considere uma API de cadastro de usuários para as próximas requisições. Veja que o parâmetro __options__ é um objeto literal que configura __method__, __headers__ e __body__.
 ```javascript
-fetch('https://api.exemplo.com/api/usuarios', {
+fetch('https://exemplo.com/api/usuarios', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ nome: 'Novo Usuário' })
@@ -190,8 +230,9 @@ fetch('https://api.exemplo.com/api/usuarios', {
 
 **PUT:**
 
+Atente-se ao parâmetro na url que indica o ID do usuário a ser atualizado.
 ```javascript
-fetch('https://api.exemplo.com/api/usuarios/1', {
+fetch('https://exemplo.com/api/usuarios/1', {
   method: 'PUT',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ nome: 'Usuário Atualizado' })
@@ -200,11 +241,13 @@ fetch('https://api.exemplo.com/api/usuarios/1', {
   .then(data => console.log(data))
   .catch(error => console.error(error));
 ```
+Essa é uma requisição 'clássica' PUT. Mas veja que é possível configurar na url, parâmetros e queries do mesmo jeito que em GET, e enviar no corpo os mesmos dados que POST. Isso abre um leque de possibilidades na comunicação cliente-servidor. 
 
 **DELETE:**
 
+Embora seja uma operação crítica, é bastante simples:
 ```javascript
-fetch('https://api.exemplo.com/api/usuarios/1', { method: 'DELETE' })
+fetch('https://exemplo.com/api/usuarios/1', { method: 'DELETE' })
   .then(response => console.log(response.status))
   .catch(error => console.error(error));
 ```
@@ -216,7 +259,7 @@ fetch('https://api.exemplo.com/api/usuarios/1', { method: 'DELETE' })
 GET para listar todos os usuários de uma tabela, por exemplo:
 
 ```javascript
-axios.get('https://api.exemplo.com/api/usuarios')
+axios.get('https://exemplo.com/api/usuarios')
   .then(response => console.log(response.data))
   .catch(error => console.error(error));
 ```
@@ -224,14 +267,14 @@ axios.get('https://api.exemplo.com/api/usuarios')
 GET mesmo não tendo corpo pode enviar informações. Abaixo, Uma requisição GET busca o recurso '/usuario', mas diferente do exemplo anterior, esta requisição busca especificamente o usuário de ID n°5.
 
 ```javascript
-axios.get('https://api.exemplo.com/api/usuarios/5')
+axios.get('https://exemplo.com/api/usuarios/5')
   .then(response => console.log(response.data))
   .catch(error => console.error(error));
 ```
 GET com query, caso o serviço consumido permita, faz uma filtragem. Observe a sintaxe que busca usuários ativos, no contrato de n° 56 e cadastro em 2009. É claro que, num sistema real, onde busca-se o dinamismo, esta string da uri seria composta por algumas variáveis nos valores da query, e não uma string constante.
 
 ```javascript
-axios.get('https://api.exemplo.com/api/usuarios?status=ativo&contrato=56&cadastro=2009')
+axios.get('https://exemplo.com/api/usuarios?status=ativo&contrato=56&cadastro=2009')
   .then(response => {
     // Lógica para lidar com a resposta da API
   })
@@ -242,7 +285,7 @@ axios.get('https://api.exemplo.com/api/usuarios?status=ativo&contrato=56&cadastr
 O exemplo anterior é equivalente ao próximo. Este, tem uma sintaxe mais concisa. Inclusive a questão da dinâmica conta aqui também. Vejamos:
 
 ```javascript
-axios.get('https://api.exemplo.com/api/usuarios', {
+axios.get('https://exemplo.com/api/usuarios', {
   params: {
     status: 'ativo',
     contrato: 56,
@@ -256,12 +299,26 @@ axios.get('https://api.exemplo.com/api/usuarios', {
     // Lógica para lidar com erros na requisição
   });
 ```
+
+Surtindo o mesmo efeito das duas anteriores, há uma possibilidade do servidor documentar essa requisição assim:
+
+```javascript
+axios.get('https://exemplo.com/api/usuarios/ativo/56/2009')
+  .then(response => {
+    // Lógica para lidar com a resposta da API
+  })
+  .catch(error => {
+    // Lógica para lidar com erros na requisição
+  });
+```
+
+
 **POST:**
 
 Já deixamos claro a diferença entre data e query numa requisição. Esta é enviada junto à uri, e aquela é o que compõe o corpo da requisição e que é restrito a alguns verbos.
 
 ```javascript
-axios.post('https://api.exemplo.com/api/usuarios', { nome: 'Novo Usuário' })
+axios.post('https://exemplo.com/api/usuarios', { nome: 'Novo Usuário' })
   .then(response => console.log(response.data))
   .catch(error => console.error(error));
 ```
@@ -269,7 +326,7 @@ axios.post('https://api.exemplo.com/api/usuarios', { nome: 'Novo Usuário' })
 **PUT:**
 
 ```javascript
-axios.put('https://api.exemplo.com/api/usuarios/1', { nome: 'Usuário Atualizado' })
+axios.put('https://exemplo.com/api/usuarios/1', { nome: 'Usuário Atualizado' })
   .then(response => console.log(response.data))
   .catch(error => console.error(error));
 ```
@@ -277,7 +334,7 @@ axios.put('https://api.exemplo.com/api/usuarios/1', { nome: 'Usuário Atualizado
 **DELETE:**
 
 ```javascript
-axios.delete('https://api.exemplo.com/api/usuarios/1')
+axios.delete('https://exemplo.com/api/usuarios/1')
   .then(response => console.log(response.status))
   .catch(error => console.error(error));
 ```
