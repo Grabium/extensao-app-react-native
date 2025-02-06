@@ -750,7 +750,7 @@ import axios from 'axios';
 
 const deletarUsuario = async (id) => {
   try {
-    const response = await axios.delete(`https://api.exemplo.com/usuarios/${id}`);
+    const response = await axios.delete('https://api.exemplo.com/usuarios/'+id);
     console.log("Usuário deletado:", response.status);
     // Lógica adicional após a exclusão (ex: atualizar a lista de usuários)
   } catch (error) {
@@ -781,27 +781,18 @@ deletarUsuario(123);
 2.  **`try...catch`:**
     *   O bloco `try` contém a requisição DELETE com Axios.
     *   O bloco `catch` lida com qualquer erro que ocorra durante a requisição.
-3.  **Tratamento de Erros:**
+3.  **Tratamento de Erros:** Do mais específico ao mais genérico, como recomendado.
     *   `error.response`: Verifica se o servidor respondeu com um status de erro (ex: 404, 500). Se sim, exibe os dados, status e cabeçalhos do erro.
     *   `error.request`: Verifica se a requisição foi feita, mas não houve resposta do servidor.
     *   `error.message`: Se o erro não for relacionado à resposta ou requisição, exibe a mensagem de erro.
 
-**Observações:**
+**Observação:**
 
-*   Este código demonstra um tratamento de erros mais robusto, que diferencia os tipos de erros e fornece informações mais detalhadas para depuração.
-*   Adaptar a URL e a lógica de tratamento de erros para sua API.
-
-Com estes exemplos e explicações detalhadas, você estará mais preparado para implementar suas telas e funcionalidades de conexão remota em seus aplicativos React Native. Lembre-se de sempre consultar a documentação oficial das tecnologias envolvidas para obter informações mais aprofundadas e explorar todas as possibilidades de cada ferramenta.
-
-## Conexão Remota com React Native: Um Guia Abrangente Utilizando Fetch e Axios
-
-A comunicação eficiente com servidores remotos é um pilar fundamental no desenvolvimento de aplicativos React Native modernos. Seja para exibir dados dinâmicos, autenticar usuários ou interagir com APIs complexas, a capacidade de realizar requisições HTTP de forma robusta e otimizada é crucial.
-
-Este guia detalhado explora as duas principais ferramentas para conexão remota no React Native: a API Fetch, nativa do JavaScript, e a biblioteca Axios, uma alternativa popular com funcionalidades avançadas. Abordaremos desde os conceitos básicos até técnicas avançadas, com exemplos práticos e explicações aprofundadas sobre arquitetura REST, tratamento de respostas, configuração de requisições, autenticação e muito mais.
+*   Acima, o código mostra um tratamento de erros mais robusto que os exemplos anteriores. Ele diferencia os tipos de erros do mais específico ao mais genérico e exibe informações para depuração.
 
 ### Parte 8: Enviando uma Chave Criptografada para uma API
 
-Em cenários onde a segurança é primordial, você pode precisar enviar uma chave criptografada para uma API que exige essa forma de autenticação. A criptografia garante que apenas o servidor, que possui a chave de descriptografia, possa acessar o valor real da chave.
+Em cenários de desenvolvimento onde a segurança do app é primordial, pode ser que a API exija uma chave criptografada para autenticação. A criptografia garante que apenas o servidor, que possui a chave de descriptografia, acesse essas informações.
 
 **Exemplo com Axios:**
 
