@@ -221,7 +221,7 @@ fetch('https://exemplo.com/api/dados')
 O __error__ faz a 'captura' do erro semelhante ao __catch__ de __try catch__. Mas podemos substituir por __catch()__.
 #### `.catch()`
 
-O método `.catch()` define uma função que será executada em caso da Promise ser rejeitada. É mais específica com os erros do o modelo anterior.
+O método `.catch()` define uma função que será executada em caso da Promise ser rejeitada. É mais específica com os erros que o modelo anterior.
 
 ```javascript
 fetch('https://exemplo.com/api/dados')
@@ -313,7 +313,7 @@ fetch('https://lib.com/api/books?launch=^2024&lang=Pt-br')
 
 **POST:**
 
-Agora considere uma API de cadastro de usuários para as próximas requisições. Veja que o parâmetro __options__ é um objeto literal que configura __method__, __headers__ e __body__.
+Agora considere uma API de cadastro de usuários para as próximas requisições. Veja que o parâmetro __options__ é um objeto literal que configura principalmente __method__, __headers__ e __body__.
 ```javascript
 fetch('https://exemplo.com/api/usuarios', {
   method: 'POST',
@@ -351,7 +351,15 @@ fetch('https://exemplo.com/api/usuarios/1', { method: 'DELETE' })
 
 **2° Bloco: Exemplos com Axios:**
 
+Axios faz que sua instância, que veremos mais a frente sobre isso, chame diretamente o verbo/método: `axios.get()`, `axios.delete()` ...
+
 **GET:**
+
+Sintaxe:
+
+```javascript
+axios.get(url [, options])
+```
 
 GET para listar todos os usuários de uma tabela, por exemplo:
 
@@ -368,6 +376,7 @@ axios.get('https://exemplo.com/api/usuarios/5')
   .then(response => console.log(response.data))
   .catch(error => console.error(error));
 ```
+
 GET com query, caso o serviço consumido permita, faz uma filtragem. Observe a sintaxe que busca usuários ativos, no contrato de n° 56 e cadastro em 2009. É claro que, num sistema real, onde busca-se o dinamismo, esta string da url seria composta por algumas variáveis nos valores da query, e não uma string constante.
 
 ```javascript
@@ -412,10 +421,21 @@ axios.get('https://exemplo.com/api/usuarios/ativo/56/2009')
 
 **POST:**
 
+Sintaxe:
+
+```javascript
+axios.post(url [, data, options])
+```
+
 Já deixamos claro a diferença entre data e query numa requisição. Esta é enviada junto à uri, e aquela é o que compõe o corpo da requisição e que é restrito a alguns verbos.
 
 ```javascript
-axios.post('https://exemplo.com/api/usuarios', { nome: 'Novo Usuário' })
+axios.post('https://exemplo.com/api/usuarios',                //url
+           { nome: 'Novo Usuário' },                          //data
+           {headers: {                                        //options
+                        'Content-Type': 'application/json'
+                      }
+           })
   .then(response => console.log(response.data))
   .catch(error => console.error(error));
 ```
