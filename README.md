@@ -424,7 +424,7 @@ axios.get('https://exemplo.com/api/usuarios/ativo/56/2009')
 Sintaxe:
 
 ```javascript
-axios.post(url [, data, options])
+axios.post(url[, data[, config]])
 ```
 
 Já deixamos claro a diferença entre data e query numa requisição. Esta é enviada junto à uri, e aquela é o que compõe o corpo da requisição e que é restrito a alguns verbos.
@@ -443,8 +443,51 @@ axios.post('https://exemplo.com/api/usuarios',                //url
 
 **PUT:**
 
+Sintaxe:
+
 ```javascript
-axios.put('https://exemplo.com/api/usuarios/1', { nome: 'Usuário Atualizado' })
+axios.put(url[, data[, config]])
+```
+
+Neste exemplo vamos alterar o nome do usuário identificado como 1.
+
+```javascript
+axios.post('https://exemplo.com/api/usuarios/1',                //url
+           { nome: 'Novo Usuário' },                            //data
+           {
+             headers: {                                         //options
+                        'Content-Type': 'application/json'
+             }
+           })
+  .then(response => console.log(response.data))
+  .catch(error => console.error(error));
+```
+
+As seguintes requisiçoes abaixo são equivalentes. Atenção à query. 
+
+```javascript
+axios.post('https://exemplo.com/api/usuarios?ID=1',             //url
+           { nome: 'Novo Usuário' },                            //data
+           {
+             headers: {                                         //options
+                        'Content-Type': 'application/json'
+             }
+           })
+  .then(response => console.log(response.data))
+  .catch(error => console.error(error));
+```
+
+```javascript
+axios.post('https://exemplo.com/api/usuarios',                  //url
+           { nome: 'Novo Usuário' },                            //data
+           {
+             headers: {                                         //options
+                        'Content-Type': 'application/json'
+             },
+             params:  {
+                         ID:1
+                      }
+           })
   .then(response => console.log(response.data))
   .catch(error => console.error(error));
 ```
