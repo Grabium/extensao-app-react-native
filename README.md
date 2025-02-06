@@ -433,7 +433,7 @@ Já deixamos claro a diferença entre data e query numa requisição. Esta é en
 axios.post('https://exemplo.com/api/usuarios',                //url
            { nome: 'Novo Usuário' },                          //data
            {
-             headers: {                                        //options
+             headers: {                                        //config
                         'Content-Type': 'application/json'
              }
            })
@@ -455,7 +455,7 @@ Neste exemplo vamos alterar o nome do usuário identificado como 1.
 axios.post('https://exemplo.com/api/usuarios/1',                //url
            { nome: 'Novo Usuário' },                            //data
            {
-             headers: {                                         //options
+             headers: {                                         //config
                         'Content-Type': 'application/json'
              }
            })
@@ -469,7 +469,7 @@ As seguintes requisiçoes abaixo são equivalentes. Atenção à query.
 axios.post('https://exemplo.com/api/usuarios?ID=1',             //url
            { nome: 'Novo Usuário' },                            //data
            {
-             headers: {                                         //options
+             headers: {                                         //config
                         'Content-Type': 'application/json'
              }
            })
@@ -494,9 +494,30 @@ axios.post('https://exemplo.com/api/usuarios',                  //url
 
 **DELETE:**
 
+Sintaxe:
+```javascript
+axios.delete(url[, config])
+```
+
 ```javascript
 axios.delete('https://exemplo.com/api/usuarios/1')
   .then(response => console.log(response.status))
+  .catch(error => console.error(error));
+```
+
+É claro que, seguindo a lógica dos verbos anteriores, embora sem o parâmetro __data__, mas com __config__:
+
+```javascript
+axios.delete('https://exemplo.com/api/usuarios',                //url
+           {
+             headers: {                                         //options
+                        'Content-Type': 'application/json'
+             },
+             params:  {
+                         ID:1
+                      }
+           })
+  .then(response => console.log(response.data))
   .catch(error => console.error(error));
 ```
 
