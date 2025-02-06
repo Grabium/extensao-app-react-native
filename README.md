@@ -604,14 +604,14 @@ axios.get('/usuarios', {
 
 ### Parte 5: O Objeto `response` do Axios
 
-O objeto `response` é retornado pelas requisições Axios e contém informações sobre a resposta do servidor. Ele possui os seguintes atributos:
+O objeto `response` é o resultado das requisições Axios e contém informações sobre a resposta do servidor. Ele possui os seguintes atributos:
 
-*   **`data`:** Dados da resposta. O formato dos dados depende do `responseType` da requisição e do tipo de conteúdo da resposta do servidor. Se o `responseType` for `json` (padrão), os dados serão um objeto JavaScript.
-*   **`status`:** Código de status HTTP da resposta (ex: 200, 404, 500).
+*   **`data`:** Dados da resposta. O formato depende do cabeçalho e de como o servidor trata tais informaçoes. Leia a documentação da API.
+*   **`status`:** Código de status HTTP da resposta (ex: 200, 404, 500) já citado na introdução deste texto.
 *   **`statusText`:** Texto do status HTTP da resposta (ex: "OK", "Not Found", "Internal Server Error").
-*   **`headers`:** Cabeçalhos da resposta. É um objeto que contém os cabeçalhos e seus valores.
-*   **`config`:** Objeto de configuração da requisição que gerou a resposta.
-*   **`request`:** Objeto da requisição original.
+*   **`headers`:** Cabeçalhos da resposta. Assim como na requisição, a resposta contém metadados para auxiliar o tratamento da mesma.
+*   **`config`:** Objeto de configuração da requisição que gerou a resposta. Importante para depuração.
+*   **`request`:** Objeto da requisição original. Ajuda a testar a aplicação cliente.
 
 **Exemplo:**
 
@@ -620,23 +620,20 @@ axios.get('/usuarios')
   .then(response => {
     console.log(response.data); // Dados da resposta
     console.log(response.status); // Código de status
+    console.log(response.statusText); // Código de status
     console.log(response.headers); // Cabeçalhos da resposta
     console.log(response.config); // Configuração da requisição
   })
   .catch(error => console.error(error));
 ```
 
-Ao compreender o parâmetro `config` e o objeto `response`, você terá controle total sobre as requisições Axios, permitindo configurar cada detalhe e acessar todas as informações relevantes da resposta do servidor. Isso possibilita a criação de aplicações React Native robustas e eficientes, capazes de lidar com diferentes cenários e necessidades de comunicação remota.
+Ao compreender o parâmetro `config` e o objeto `response`, é possível controlar as requisições Axios, permitindo acessar e configurar cada detalhe e as informações relevantes da resposta do servidor tornando a criação de aplicações React Native robustas e capazes de lidar com variados cenários na comunicação remota.
 
-Lembre-se de consultar a documentação oficial do Axios para obter informações mais detalhadas sobre cada atributo e funcionalidade. Com este conhecimento, você estará pronto para construir aplicativos React Native incríveis, conectados ao mundo e capazes de oferecer experiências únicas aos seus usuários.
-
-## Conexão Remota com React Native: Um Guia Abrangente Utilizando Fetch e Axios
-
-A comunicação eficiente com servidores remotos é um pilar fundamental no desenvolvimento de aplicativos React Native modernos. Seja para exibir dados dinâmicos, autenticar usuários ou interagir com APIs complexas, a capacidade de realizar requisições HTTP de forma robusta e otimizada é crucial.
-
-Este guia detalhado explora as duas principais ferramentas para conexão remota no React Native: a API Fetch, nativa do JavaScript, e a biblioteca Axios, uma alternativa popular com funcionalidades avançadas. Abordaremos desde os conceitos básicos até técnicas avançadas, com exemplos práticos e explicações aprofundadas sobre arquitetura REST, tratamento de respostas, configuração de requisições, autenticação e muito mais.
+Repito o concelho. Consulte a documentação não apenas do Axios ou qualquer biblioteca que faz parte do desenvolvimento para obter informações exatas sobre cada funcionalidade. Cursos, fóruns e outras fontes mais humanizada de informação podem conter equívocos, imprecisões ou um contexto ocultado.
 
 ### Parte 6: Exemplo com `FlatList` em Paradigma Funcional
+
+Vamos por um pouco de front-end aqui. Considerando que o leitor conheça a utilidade dos __hooks__ e __Components__. Não terá uma profunda explicação, pois foge do tema. Vejamos:
 
 ```javascript
 import React, { useState, useEffect } from 'react';
@@ -726,26 +723,25 @@ export default Inventario;
 
 1.  **Importações:** Importamos os componentes necessários do React Native e o Axios.
 2.  **Estados:**
-    *   `items`: Armazena os dados do inventário.
-    *   `loading`: Indica se a requisição está em andamento.
-    *   `error`: Armazena erros, se houver.
+    *   `items`: Array de objetos item.
+    *   `loading`: Flag que indica se a requisição está em andamento.
+    *   `error`: Errors e exceptions.
 3.  **`useEffect`:**
     *   Faz a requisição GET para a API.
-    *   Atualiza o estado `items` com os dados recebidos.
-    *   Lida com erros, atualizando o estado `error`.
-    *   Define `loading` como `false` após a requisição (com sucesso ou falha).
-4.  **`renderItem`:** Renderiza cada item do inventário na `FlatList`.
-5.  **Renderização Condicional:**
-    *   Exibe um indicador de carregamento (`ActivityIndicator`) enquanto `loading` for `true`.
+    *   Atualiza o estado `items` com a o array recebido recebidos.
+    *   Lida com erros, caso haja, manipulando o estado `error`.
+    *   Define `loading` como `false` após a requisição (com sucesso ou falha) interrompendo a tela de loading.
+4.  **`renderItem`:** Renderiza cada item na `FlatList`.
+5.  **Renderização Condicional:** Entramos aqui na parte com os `if` :
+    *   Exibe uma imagem de carregamento (`ActivityIndicator`) enquanto `loading` for `true`.
     *   Exibe uma mensagem de erro se `error` não for `null`.
-    *   Exibe a `FlatList` com os dados do inventário se a requisição for bem-sucedida.
+    *   Exibe a `FlatList` que é o resultado esperado.
 6.  **Estilos:** Define os estilos para os componentes.
 
 **Observações:**
 
-*   Substitua `'https://api.exemplo.com/inventario'` pela URL da sua API.
-*   Certifique-se de que cada item do seu inventário tenha um ID único para a `FlatList` funcionar corretamente.
-*   Este código utiliza o paradigma funcional com hooks (`useState` e `useEffect`).
+*   É obrigatório um ID único para cada item na `FlatList`. Do contrário a tela não funciona.
+*   Perceba o paradigma funcional com hooks (`useState` e `useEffect`).
 
 ### Parte 7: Exemplo de Requisição DELETE com Tratamento de Erros
 
