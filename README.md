@@ -521,33 +521,10 @@ axios.delete('https://exemplo.com/api/usuarios',                //url
   .catch(error => console.error(error));
 ```
 
-### Comparando Fetch e Axios
-
-| Feature | Fetch | Axios |
-|---|---|---|
-| Sintaxe | Mais verbosa | Mais concisa |
-| Tratamento de JSON | Requer `response.json()` | Automático |
-| Interceptores | Não possui | Possui |
-| Cancelamento de requisições | Requer implementação manual | Possui |
-| Popularidade | Nativa do JavaScript | Biblioteca popular |
-
-Em resumo, tanto Fetch quanto Axios são ferramentas poderosas para realizar requisições HTTP em React Native. A escolha entre eles depende das suas necessidades e preferências. Se você busca uma solução nativa e simples, Fetch pode ser suficiente. Se você precisa de funcionalidades avançadas e uma sintaxe mais concisa, Axios pode ser a melhor opção.
-
-Este guia detalhado aborda os conceitos fundamentais e exemplos práticos de como utilizar Fetch e Axios para conectar seu aplicativo React Native com servidores remotos. Com este conhecimento, você estará apto a construir aplicações robustas e eficientes, capazes de se comunicar com qualquer API e oferecer uma experiência rica e interativa aos seus usuários.
-
-Lembre-se de que este guia é apenas uma introdução ao mundo da conexão remota com React Native. Existem muitos outros tópicos avançados, como autenticação, tratamento de erros, otimização de performance e muito mais. Explore a documentação oficial do React Native e das bibliotecas Fetch e Axios para se aprofundar nesses e outros temas.
-
-Com este conhecimento, você estará pronto para construir aplicativos React Native incríveis, conectados ao mundo e capazes de oferecer experiências únicas aos seus usuários.
-
-## Conexão Remota com React Native: Um Guia Abrangente Utilizando Fetch e Axios
-
-A comunicação eficiente com servidores remotos é um pilar fundamental no desenvolvimento de aplicativos React Native modernos. Seja para exibir dados dinâmicos, autenticar usuários ou interagir com APIs complexas, a capacidade de realizar requisições HTTP de forma robusta e otimizada é crucial.
-
-Este guia detalhado explora as duas principais ferramentas para conexão remota no React Native: a API Fetch, nativa do JavaScript, e a biblioteca Axios, uma alternativa popular com funcionalidades avançadas. Abordaremos desde os conceitos básicos até técnicas avançadas, com exemplos práticos e explicações aprofundadas sobre arquitetura REST, tratamento de respostas, configuração de requisições, autenticação e muito mais.
 
 ### Parte 3: Exportando uma Instância Axios com o Mínimo de Configuração
 
-Instanciar um objeto 'aleatoriamente' gera uma certa complexidade, em questão de desempenho, no sistema. É muito comum concentrar a instância do axios, ou qualquer API ou módulo, para que possa ser exportada e consumida em outros pontos, de forma controlada. Gerando dessa forma, evitamos a repetição desnecessária do código. No exemplo a seguir, definimos configurações que serão usadas em todas as requisições:
+Instanciar um objeto 'aleatoriamente' gera uma certa complexidade, em muitos sentidos, no sistema. É muito comum concentrar a instância do axios, ou qualquer API ou módulo, para que possa ser exportada e consumida em módulos cliente, de forma controlada. Gerando dessa forma, evitamos a repetição desnecessária do código. No exemplo a seguir, definimos configurações que serão usadas em todas as requisições:
 
 
 _/axiosServiceInstance.js_
@@ -555,14 +532,12 @@ _/axiosServiceInstance.js_
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://api.exemplo.com/api/', // URL base da sua API
-  headers: { 'Content-Type': 'application/json' } // Cabeçalhos padrão
-});
+  baseURL: 'https://api.exemplo.com/api/',          // URL base da sua API
+  headers: { 'Content-Type': 'application/json' }   // Cabeçalho básico
 
 export default api;
 ```
-
-
+Os módulos clientes podem agora consumir __api__ e dessa forma o código está mais manutenível.
 
 **Explicação:**
 
@@ -575,12 +550,12 @@ export default api;
 
 **Como usar:**
 
-Em outros arquivos, você pode importar a instância `axiosServiceInstance` e utilizá-la para fazer requisições:
+Em outros arquivos, você pode importar a instância `axiosServiceInstance` e utilizá-la para fazer requisições. Veja que não será mais necessário definir a parte do endereço que já foi definida no código anterior, o `https://api.exemplo.com/api/` e todas as configurações foram predeterminadas eliminando a repetição de código:
 
 ```javascript
 import api from './axiosServiceInstance'; // Importa a instância configurada
 
-api.get('/usuarios')
+api.get('/usuarios')   //será considerado ´https://api.exemplo.com/api/usuarios´ na execução.
   .then(response => console.log(response.data))
   .catch(error => console.error(error));
 
@@ -591,24 +566,28 @@ api.post('/produtos', { nome: 'Novo Produto', preco: 10 })
 
 ### Parte 4: O Parâmetro `config` da Requisição Axios
 
-O parâmetro `config` é um objeto que permite personalizar cada requisição individualmente, fornecendo controle preciso sobre o comportamento da requisição. Ele possui diversos atributos que podem ser utilizados para configurar a requisição de acordo com suas necessidades.
+O parâmetro `config` é um objeto literal que permite personalizar a requisição, garante o controle sobre o comportamento desta. Tem uma gama de atributos customizáveis que podem ser úteis para adequar a requisição as necessidades do desenvolvedor.
 
 **Atributos do `config`:**
 
-*   **`url`:** URL da requisição. Se `baseURL` for definido na instância Axios, este será o caminho relativo à URL base.
-*   **`method`:** Método HTTP da requisição (GET, POST, PUT, DELETE, etc.). Se não for especificado, o padrão é GET.
+*   **`url`:** URL da requisição. Se `baseURL` for definido na instância Axios, este será o que chamamos de rota ou end-point.
+*   **`method`:** Método HTTP da requisição. Caso não seja especificado, o padrão é GET.
 *   **`baseURL`:** URL base para a requisição. Se definido, será usado em vez do `baseURL` da instância Axios.
-*   **`headers`:** Cabeçalhos da requisição. Permite adicionar ou sobrescrever cabeçalhos definidos na instância Axios.
-*   **`params`:** Parâmetros da URL para requisições GET. É um objeto que será convertido em uma string de consulta (query string).
-*   **`data`:** Dados do corpo da requisição para métodos POST, PUT, PATCH. Pode ser um objeto, string ou FormData.
-*   **`timeout`:** Tempo limite para a requisição em milissegundos. Se a requisição não for concluída dentro do tempo limite, um erro será lançado.
-*   **`auth`:** Credenciais de autenticação. Pode ser um objeto com `username` e `password` ou um objeto com `token`.
-*   **`responseType`:** Tipo de resposta esperado. Pode ser `json` (padrão), `text`, `blob`, `arraybuffer` ou `stream`.
+*   **`headers`:** Cabeçalhos da requisição. Para adicionar ou sobrescrever os definidos na instância Axios.
+*   **`params`:** String de consulta (query string).
+*   **`data`:** Corpo da requisição para métodos POST, PUT, PATCH. Nos formatos já explanados na Introdução à Arquitetura REST.
+*   **`timeout`:** Tempo limite para retornar em milissegundos. Caso não haja retorno dentro do tempo indicado, será lançado um erro.
+*   **`auth`:** Credenciais para autenticação. Objeto com `username` e `password` ou um objeto com `token`.
+*   **`responseType`:** Tipo de resposta esperado. Pode ser `json`, `xml`, `text`, `blob`, e outros.
 *   **`transformRequest`:** Função que permite modificar os dados da requisição antes de serem enviados para o servidor.
 *   **`transformResponse`:** Função que permite modificar os dados da resposta antes de serem entregues ao código que fez a requisição.
-*   **`cancelToken`:** Objeto que permite cancelar a requisição.
-*   **`onUploadProgress`:** Função que permite acompanhar o progresso do upload de dados.
-*   **`onDownloadProgress`:** Função que permite acompanhar o progresso do download de dados.
+*   **`onUploadProgress`:** Função que permite acompanhar e tratar o progresso do upload de dados.
+*   **`onDownloadProgress`:** Função que permite acompanhar e tratar o progresso do download de dados.
+*   **`signal`:** Sinal e uma instância de AbortController pode ser usada para cancelar a solicitação.
+*   **`proxy`:** Define o nome do host, a porta e o protocolo do servidor proxy. Define credenciais e outras funcionalidades.
+
+Há algumas outras opções além dessas elencadas que estão na documentação do Axios, ou sofreram depreciação ou são exclusivas para usar no node.js. como __maxContentLength__, __maxBodyLength__ e __cancelToken__.
+
 
 **Exemplo:**
 
