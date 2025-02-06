@@ -26,35 +26,35 @@ Home page de um site. Uma biblioteca:
 
 ```
 GET /usuarios HTTP/1.1
-Host: api.lib.com/
+Host: api.lib.com/api/
 ```
 
 Listar todos os livros desta biblioteca:
 
 ```
 GET /usuarios HTTP/1.1
-Host: api.lib.com/books
+Host: api.lib.com/api/books
 ```
 
 GET com 1 parâmetro. um ISBN-_International Standard Book Number_ fictício de um livro que retorna apenas um livro específico:
 
 ```
 GET /usuarios HTTP/1.1
-Host: api.lib.com/books/851598524568523
+Host: api.lib.com/api/books/851598524568523
 ```
 
 GET com 2 parâmetros. Neste caso volta a receber uma lista de livros. Livros lançados depois de 2024 e em poruguês.
 
 ```
 GET /usuarios HTTP/1.1
-Host: api.lib.com/books/^2024/Pt-br
+Host: api.lib.com/api/books/^2024/Pt-br
 ```
 
 GET com os parâmetros nomeados. Então chamamos de __query__. Produz resultado equivalente à requisição anterior. Não deve ser confundida com uma requisição com corpo. Não deve ser utilizada para alterar o estado do sistema se a API segue os padrões REST.
 
 ```
 GET /usuarios HTTP/1.1
-Host: api.lib.com/books?launch=^2024&lang=Pt-br
+Host: api.lib.com/api/books?launch=^2024&lang=Pt-br
 ```
 
 **POST Criar:**
@@ -63,7 +63,7 @@ Requisição com caráter de alterar o sistema. Comumente usado para criar um no
 
 ```
 POST /usuarios HTTP/1.1
-Host: api.exemplo.com/
+Host: api.exemplo.com/api/
 Content-Type: application/json
 
 {
@@ -78,7 +78,7 @@ Frequentemente uma requisição PUT é usada para atualizar um registro. Perceba
 
 ```
 PUT /usuarios/34 HTTP/1.1
-Host: api.exemplo.com/
+Host: api.exemplo.com/api/
 Content-Type: application/xml
 
 <usuario>
@@ -95,7 +95,7 @@ Sem corpo, o parâmetro na uri indica qual registro usuário será deletado. Mes
 
 ```
 DELETE /usuarios/34 HTTP/1.1
-Host: api.exemplo.com
+Host: api.exemplo.com/api/
 ```
 
 **Cabeçalhos Comuns:**
@@ -151,7 +151,7 @@ let promise = fetch(url, [options])
 **GET:**
 
 ```javascript
-fetch('https://api.exemplo.com/dados', {
+fetch('https://api.exemplo.com/api/dados', {
   method: 'GET',
   headers: {
     'X-Custom-Header': 'valor-do-meu-cabecalho',
@@ -169,7 +169,7 @@ fetch('https://api.exemplo.com/dados', {
 Quando não é definido o __method__, automaticamente, fetch envia uma requisição GET. É possível, e comum, enviar a requisição sem o 2° parâmetro, o __options__.
 
 ```javascript
-fetch('https://api.exemplo.com/usuarios')
+fetch('https://api.exemplo.com/api/usuarios')
   .then(response => response.json())
   .then(data => console.log(data))
   .catch(error => console.error(error));
@@ -178,7 +178,7 @@ fetch('https://api.exemplo.com/usuarios')
 **POST:**
 
 ```javascript
-fetch('https://api.exemplo.com/usuarios', {
+fetch('https://api.exemplo.com/api/usuarios', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ nome: 'Novo Usuário' })
@@ -191,7 +191,7 @@ fetch('https://api.exemplo.com/usuarios', {
 **PUT:**
 
 ```javascript
-fetch('https://api.exemplo.com/usuarios/1', {
+fetch('https://api.exemplo.com/api/usuarios/1', {
   method: 'PUT',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ nome: 'Usuário Atualizado' })
@@ -204,7 +204,7 @@ fetch('https://api.exemplo.com/usuarios/1', {
 **DELETE:**
 
 ```javascript
-fetch('https://api.exemplo.com/usuarios/1', { method: 'DELETE' })
+fetch('https://api.exemplo.com/api/usuarios/1', { method: 'DELETE' })
   .then(response => console.log(response.status))
   .catch(error => console.error(error));
 ```
@@ -216,7 +216,7 @@ fetch('https://api.exemplo.com/usuarios/1', { method: 'DELETE' })
 GET para listar todos os usuários de uma tabela, por exemplo:
 
 ```javascript
-axios.get('https://api.exemplo.com/usuarios')
+axios.get('https://api.exemplo.com/api/usuarios')
   .then(response => console.log(response.data))
   .catch(error => console.error(error));
 ```
@@ -224,14 +224,14 @@ axios.get('https://api.exemplo.com/usuarios')
 GET mesmo não tendo corpo pode enviar informações. Abaixo, Uma requisição GET busca o recurso '/usuario', mas diferente do exemplo anterior, esta requisição busca especificamente o usuário de ID n°5.
 
 ```javascript
-axios.get('https://api.exemplo.com/usuarios/5')
+axios.get('https://api.exemplo.com/api/usuarios/5')
   .then(response => console.log(response.data))
   .catch(error => console.error(error));
 ```
 GET com query, caso o serviço consumido permita, faz uma filtragem. Observe a sintaxe que busca usuários ativos, no contrato de n° 56 e cadastro em 2009. É claro que, num sistema real, onde busca-se o dinamismo, esta string da uri seria composta por algumas variáveis nos valores da query, e não uma string constante.
 
 ```javascript
-axios.get('https://api.exemplo.com/usuarios?status=ativo&contrato=56&cadastro=2009')
+axios.get('https://api.exemplo.com/api/usuarios?status=ativo&contrato=56&cadastro=2009')
   .then(response => {
     // Lógica para lidar com a resposta da API
   })
@@ -242,7 +242,7 @@ axios.get('https://api.exemplo.com/usuarios?status=ativo&contrato=56&cadastro=20
 O exemplo anterior é equivalente ao próximo. Este, tem uma sintaxe mais concisa. Inclusive a questão da dinâmica conta aqui também. Vejamos:
 
 ```javascript
-axios.get('https://api.exemplo.com/usuarios', {
+axios.get('https://api.exemplo.com/api/usuarios', {
   params: {
     status: 'ativo',
     contrato: 56,
@@ -261,7 +261,7 @@ axios.get('https://api.exemplo.com/usuarios', {
 Já deixamos claro a diferença entre data e query numa requisição. Esta é enviada junto à uri, e aquela é o que compõe o corpo da requisição e que é restrito a alguns verbos.
 
 ```javascript
-axios.post('https://api.exemplo.com/usuarios', { nome: 'Novo Usuário' })
+axios.post('https://api.exemplo.com/api/usuarios', { nome: 'Novo Usuário' })
   .then(response => console.log(response.data))
   .catch(error => console.error(error));
 ```
@@ -269,7 +269,7 @@ axios.post('https://api.exemplo.com/usuarios', { nome: 'Novo Usuário' })
 **PUT:**
 
 ```javascript
-axios.put('https://api.exemplo.com/usuarios/1', { nome: 'Usuário Atualizado' })
+axios.put('https://api.exemplo.com/api/usuarios/1', { nome: 'Usuário Atualizado' })
   .then(response => console.log(response.data))
   .catch(error => console.error(error));
 ```
@@ -277,7 +277,7 @@ axios.put('https://api.exemplo.com/usuarios/1', { nome: 'Usuário Atualizado' })
 **DELETE:**
 
 ```javascript
-axios.delete('https://api.exemplo.com/usuarios/1')
+axios.delete('https://api.exemplo.com/api/usuarios/1')
   .then(response => console.log(response.status))
   .catch(error => console.error(error));
 ```
@@ -310,11 +310,13 @@ Este guia detalhado explora as duas principais ferramentas para conexão remota 
 
 Instanciar um objeto 'aleatoriamente' gera uma certa complexidade, em questão de desempenho, no sistema. É muito comum concentrar a instância do axios, ou qualquer API ou módulo, para que possa ser exportada e consumida em outros pontos, de forma controlada. Gerando dessa forma, evitamos a repetição desnecessária do código. No exemplo a seguir, definimos configurações que serão usadas em todas as requisições:
 
+
+_/axiosServiceInstance.js_
 ```javascript
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://api.exemplo.com', // URL base da sua API
+  baseURL: 'https://api.exemplo.com/api/', // URL base da sua API
   headers: { 'Content-Type': 'application/json' } // Cabeçalhos padrão
 });
 
@@ -334,10 +336,10 @@ export default api;
 
 **Como usar:**
 
-Em outros arquivos, você pode importar a instância `api` e utilizá-la para fazer requisições:
+Em outros arquivos, você pode importar a instância `axiosServiceInstance` e utilizá-la para fazer requisições:
 
 ```javascript
-import api from './api'; // Importa a instância configurada
+import api from './axiosServiceInstance'; // Importa a instância configurada
 
 api.get('/usuarios')
   .then(response => console.log(response.data))
