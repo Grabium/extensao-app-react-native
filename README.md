@@ -432,9 +432,10 @@ Já deixamos claro a diferença entre data e query numa requisição. Esta é en
 ```javascript
 axios.post('https://exemplo.com/api/usuarios',                //url
            { nome: 'Novo Usuário' },                          //data
-           {headers: {                                        //options
+           {
+             headers: {                                        //options
                         'Content-Type': 'application/json'
-                      }
+             }
            })
   .then(response => console.log(response.data))
   .catch(error => console.error(error));
