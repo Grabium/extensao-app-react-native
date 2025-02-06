@@ -139,6 +139,103 @@ O servidor responde à requisição com um código de status indicando o andamen
 *   **5xx (Erro do Servidor):**
     *   500 (Erro Interno do Servidor): Erro genérico no servidor.
     *   503 (Serviço Indisponível): Servidor temporariamente indisponível.
+ 
+## Programação Assíncrona em JavaScript: Uma Abordagem Abrangente com Async/Await e Tratamento de Erros
+
+Antes de segir-mos com exemplos de requisições, é necessário explanar um pouco sobre o processo assíncrono do javascript já que ele marca grande presença quando se trata de processos que podem demorar indefinidamente ou retornar um erro. 
+
+### O que é Programação Assíncrona?
+
+Ao contrário da a programação síncrona, onde as tarefas são executadas em sequência, a programação assíncrona executa múltiplas tarefas de forma concorrente, sem que uma precise esperar o término da outra. Isso é pode ser útil quando uma operação pode levar um tempo considerável para ser concluída, isso se aplica às conexões remotas, onde o tempo de resposta varia dependendo da latência da rede e do processamento interno do sistema.
+
+### Por que Usar Programação Assíncrona em JavaScript?
+
+Essa característica resolve problemas de travamento de tela que aguarda o segundo plano. Ele permite que o código continue seu fluxo programático até que a operação de segundo plano finalize. Então um evento ou callback é acionado, fazendo que o sistema processe os resultados da operação.
+
+### Async/Await: Uma Abordagem Moderna para Programação Assíncrona
+
+Uma forma de escrever o código assíncrono em JavaScriptOs é fazendo o uso de operadores __async__ __await__.
+
+#### `async`
+
+É utilizada para declarar uma função que é assíncrona. Ela sempre retorna uma Promise, ainda que não seja usado de forma explicita a palavra-chave __return__. Em caso de retorno de valor, este será encapsulado em uma Promise resolvida. Caso seja lançada uma exceção, a Promise retornada será rejeitada.
+
+```javascript
+async function obterDados() {
+  // ...
+}
+```
+
+#### `await`
+
+Só pode ser usada dentro da função assíncrona. A função aguardará onde estiver o __await__ a Promise ser resolvida ou rejeitada. No caso de resolvida, o valor resolvido é retornado. No caso de rejeitada, a exceção é lançada.
+
+```javascript
+async function obterDados() {
+  const resposta = await fetch('https://exemplo.com/api/dados');
+  const dados = await resposta.json();
+  return dados;
+}
+```
+
+#### Tratamento de Erros com `try...catch`
+
+Blocos `try...catch` lidando com erros em código assíncrono:
+
+```javascript
+async function obterDados() {
+  try {
+    const resposta = await fetch('https://exemplo.com/api/dados');
+    const dados = await resposta.json();
+    return dados;
+  } catch (erro) {
+    console.error('Erro ao obter dados:', erro);
+    // Lidar com o erro de forma apropriada
+  }
+}
+```
+
+### `.then()` e `.catch()`:
+
+Antes do async/await, a forma mais comum de lidar com Promises era através dos métodos `.then()` e `.catch()`.
+
+#### `.then()`
+
+O método `.then()` é utilizado para registrar uma função que será executada quando a Promise for resolvida. Ele recebe dois argumentos: uma função para lidar com o caso de sucesso (resolução da Promise) e uma função para lidar com o caso de erro (rejeição da Promise).
+
+```javascript
+fetch('https://exemplo.com/api/dados')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Erro na requisição'); // Lança um erro se a resposta não for OK
+    }
+    return response.json();
+  }, error => {
+    console.error('Erro na requisição:', error); // Lida com erros na requisição
+  })
+  .then(data => {
+    console.log('Dados recebidos:', data); // Exibe os dados no console
+  });
+```
+
+O __error__ faz a 'captura' do erro semelhante ao __catch__ de __try catch__. Mas podemos substituir por __catch()__.
+#### `.catch()`
+
+O método `.catch()` define uma função que será executada em caso da Promise ser rejeitada. É mais específica com os erros do o modelo anterior.
+
+```javascript
+fetch('https://exemplo.com/api/dados')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Erro na requisição'); // Lança um erro se a resposta não for OK
+    }
+    return response.json();
+  })
+  .catch(erro => {
+    console.error('Erro na requisição:', error); // Lida com erros na requisição
+  });
+```
+Seguiremos a partir daqui para os exemplos. Todos usando __.then().catch()__ de forma simples. O suficiente para entender as requisições.
 
 ### Parte 2: Exemplos com Fetch e Axios
 
@@ -264,14 +361,14 @@ axios.get('https://exemplo.com/api/usuarios')
   .catch(error => console.error(error));
 ```
 
-GET mesmo não tendo corpo pode enviar informações. Abaixo, Uma requisição GET busca o recurso '/usuario', mas diferente do exemplo anterior, esta requisição busca especificamente o usuário de ID n°5.
+Abaixo, Uma requisição GET busca o recurso '/usuario', mas diferente do exemplo anterior, esta requisição busca especificamente o usuário de ID n°5.
 
 ```javascript
 axios.get('https://exemplo.com/api/usuarios/5')
   .then(response => console.log(response.data))
   .catch(error => console.error(error));
 ```
-GET com query, caso o serviço consumido permita, faz uma filtragem. Observe a sintaxe que busca usuários ativos, no contrato de n° 56 e cadastro em 2009. É claro que, num sistema real, onde busca-se o dinamismo, esta string da uri seria composta por algumas variáveis nos valores da query, e não uma string constante.
+GET com query, caso o serviço consumido permita, faz uma filtragem. Observe a sintaxe que busca usuários ativos, no contrato de n° 56 e cadastro em 2009. É claro que, num sistema real, onde busca-se o dinamismo, esta string da url seria composta por algumas variáveis nos valores da query, e não uma string constante.
 
 ```javascript
 axios.get('https://exemplo.com/api/usuarios?status=ativo&contrato=56&cadastro=2009')
@@ -282,7 +379,7 @@ axios.get('https://exemplo.com/api/usuarios?status=ativo&contrato=56&cadastro=20
     // Lógica para lidar com erros na requisição
   });
 ```
-O exemplo anterior é equivalente ao próximo. Este, tem uma sintaxe mais concisa. Inclusive a questão da dinâmica conta aqui também. Vejamos:
+O exemplo anterior é equivalente ao próximo. Este, tem uma sintaxe mais clara com a segregação das partes que compoem o endereço. Inclusive a questão da dinâmica conta aqui também. Vejamos:
 
 ```javascript
 axios.get('https://exemplo.com/api/usuarios', {
