@@ -145,7 +145,7 @@ O servidor responde à requisição com um código de status indicando o andamen
 Falamos muitoo sobre a estrutura de uma requisição. Mas agora vamos entender uma característica importante do comportamento. Dizer que HTTP é stateless significa que o servidor não mantém informações sobre as requisições anteriores que o cliente, em nosso caso é o aplicativo, fez. O app envia uma requisição para o servidor (ex: um app que consome um serviço de uma pizzaria que entrega em domicílio envia um comando correspondente à "busque uma lista de opções de pizzas para inserir no pedido") que a processa e responde (ex: um array de objetos correspondente às pizzas). Caso o mesmo dispositivo e app repita a requisição (ex: um botão de refresh), espera-se que o servidor processe como que a primeira não tivesse existido.
 Isso vai resultar em:
 *  Classificação das requisições em __idempotente__ e __não idempotente__
-*  Necessidade do uso de identificação de usuário nas requisições. Veja [Parte 9: Enviando um Bearer Token para uma Rota Protegida](#Parte9)
+*  Necessidade do uso de identificação de usuário nas requisições. Veja [Parte 9: Enviando um Bearer Token para uma Rota Protegida](#Parte9).
 
 ### Requisição com Método Idempotente:
 É aquela que se reenviada, não altera o estado do servidor. Com "estado" aqui se quer dizer "dados persistidos".
@@ -830,24 +830,29 @@ export default api;
 
 ### Parte 9: Enviando um Bearer Token para uma Rota Protegida {#Parte9}
 
-HTTP não salva estado entre mensagens. 
-O Bearer Token é um método de autenticação amplamente utilizado em APIs REST. Ele consiste em um token (geralmente um JWT - JSON Web Token) que é enviado no cabeçalho da requisição para comprovar a identidade do usuário.
+Vimos anteriormente que HTTP é stateless. Em vista disso, alguns servidores fazem uso de seção. Emboda seja bastante seguro, o uso de seção trás algumas desvantagens. O servidor precisa armazenar as informações que podem gerar problemas no desempenho em aplicações com muitos usuários. Otra solução também segura e com uso em crescimento atualmente é o Bearer Token (pode ser insterpretado como "_portador de acesso_"). Durante o que seria uma seçao, na verdade a autorização é enviada no cabeçalho de cada requisiçao. O servidor verifica se é válido e reponde com o recurso solicitado. Em analogia, seria como andar dentro de um prédio com um crachá. Os seguranças analizam o crachá e permitem a passagem, se estiver de acordo.
 
-Bearer Token é uma forma de autenticar titulares (usuário). Segue o fluxo:
-*   O usuário envia as credencias após cadastrado;
-*   Servidor valida, autentica, e define a autorização;
+
+Veja o fluxo de um login tradicional de um sistema que usa Bearer Token:
+*   O usuário envia as credencias após cadastrado para uma rota não protegida;
+*   Servidor valida, autentica, e define a autorização - vale a atenção ao fato de que esses passos representam procedimentos diferentes;
 *   Servidor persiste uma chave criptografada segundo o algoritmo escolhido contendo as informações definidas sobre o titular;
-*   Servidor envia a chave que deve receber do usuário nas próximas requisições;
+*   Servidor envia a chave que deve receber do usuário nas próximas requisições contendo a autorização citada;
 *   App agora possui o token com a autorização de acesso adequada ao usuário. 
+
+Nisso constitui o login. Agora vamos ao acesso:
+*  Com a chave em posse, o App a envia em cada requisição para rotas protegidas;
+*  O servidor analiza a chave e sabe, de acordo com ela, quem é o titular;
+*  O servidor processa e retorna ao cliente com o recurso solicitado.
+
 
 **Exemplo com Axios:**
 
 ```javascript
 import axios from 'axios';
 
-const acessarRotaProtegida = async () => {
+const acessarRotaProtegida = async (token) => {
   try {
-    const token = 'seu_token_aqui'; // Obtém o token (ex: após o login)
 
     const response = await axios.get('https://api.exemplo.com/rota_protegida', {
       headers: {
@@ -862,51 +867,23 @@ const acessarRotaProtegida = async () => {
 };
 
 // Exemplo de uso:
-acessarRotaProtegida();
+acessarRotaProtegida(token); //token fornecido após o login.
 ```
 
 **Explicação:**
 
 1.  **`acessarRotaProtegida`:** Função assíncrona que acessa a rota protegida.
-2.  **Obtenção do Token:** Obtemos o token (ex: após o usuário fazer login).
-3.  **Requisição GET:**
-    *   Enviamos o token no cabeçalho `Authorization` da requisição, utilizando a sintaxe `Bearer ${token}`.
+3.  **Requisição GET:** Enviamos o token no cabeçalho `Authorization` da requisição, utilizando a sintaxe `Bearer ${token}`.
 4.  **Tratamento de Erros:** Lida com erros na requisição.
 
 **Observações:**
 
-*   Substitua `'seu_token_aqui'` pelo token real do usuário.
 *   A API deve validar o token no servidor para autorizar o acesso à rota protegida.
-*   O JWT (JSON Web Token) é um formato comum para Bearer Tokens, mas você pode usar outros formatos, dependendo da sua API.
 
-Com estes exemplos, você aprendeu como enviar uma chave criptografada e um Bearer Token para se comunicar com APIs que exigem autenticação. A criptografia garante a segurança da chave, enquanto o Bearer Token permite que o usuário acesse rotas protegidas após se autenticar.
-
-Lembre-se de que a segurança é um aspecto fundamental no desenvolvimento de aplicações React Native. Utilize as técnicas de autenticação e criptografia adequadas para proteger os dados dos seus usuários e garantir a integridade do seu aplicativo.
-
-## Conexão Remota com React Native: Um Guia Abrangente Utilizando Fetch e Axios
-
-A comunicação eficiente com servidores remotos é um pilar fundamental no desenvolvimento de aplicativos React Native modernos. Seja para exibir dados dinâmicos, autenticar usuários ou interagir com APIs complexas, a capacidade de realizar requisições HTTP de forma robusta e otimizada é crucial.
-
-Este guia detalhado explora as duas principais ferramentas para conexão remota no React Native: a API Fetch, nativa do JavaScript, e a biblioteca Axios, uma alternativa popular com funcionalidades avançadas. Abordaremos desde os conceitos básicos até técnicas avançadas, com exemplos práticos e explicações aprofundadas sobre arquitetura REST, tratamento de respostas, configuração de requisições, autenticação e muito mais.
 
 ### Parte 10: A Importância da Documentação Oficial
 
-A documentação oficial das tecnologias é a fonte mais confiável e completa de informações. Ela fornece detalhes precisos sobre o funcionamento de cada ferramenta, seus recursos, parâmetros, exemplos de uso e melhores práticas.
-
-Consultar a documentação oficial é fundamental para:
-
-*   **Compreender os fundamentos:** A documentação explica os conceitos básicos e os princípios por trás de cada tecnologia, permitindo que você construa uma base sólida de conhecimento.
-*   **Dominar os recursos:** A documentação detalha todos os recursos e funcionalidades disponíveis, permitindo que você explore ao máximo o potencial de cada ferramenta.
-*   **Aprender as melhores práticas:** A documentação oferece recomendações e exemplos de como usar as tecnologias de forma eficiente e segura.
-*   **Solucionar problemas:** A documentação pode conter informações sobre erros comuns e como solucioná-los.
-*   **Manter-se atualizado:** A documentação é atualizada regularmente com as últimas novidades e melhorias.
-
-**Links para a documentação oficial:**
-
-*   **HTTP:** [https://www.iana.org/assignments/http-status-codes/http-status-codes.xml](https://www.iana.org/assignments/http-status-codes/http-status-codes.xml)
-*   **React Native:** [https://necolas.github.io/react-native-web/](https://necolas.github.io/react-native-web/)
-*   **Fetch API:** [https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
-*   **Axios:** [https://github.com/axios/axios](https://github.com/axios/axios)
+//Apagado
 
 ### Parte 11: Arquiteturas de Aplicação e Requisições HTTP
 
