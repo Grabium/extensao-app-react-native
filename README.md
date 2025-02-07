@@ -889,7 +889,9 @@ acessarRotaProtegida(token); //token fornecido após o login.
 
 //Apagado
 
-### Parte 12: Exemplo de "Loading" e sua Importância
+### Parte 12: Exemplo de "Loading".
+
+O famoso sinal do símbolo que indica que está carregando pode ser aplicado de um módulo nativo do React Native. Trata-se do componente __ActivityIndicator__ (_Indicador de Atividade_). É possível customizá-lo: 
 
 ```javascript
 import React, { useState, useEffect } from 'react';
@@ -952,32 +954,28 @@ const styles = StyleSheet.create({
     fontSize: 
 ```
 
-## Conexão Remota com React Native: Um Guia Abrangente Utilizando Fetch e Axios
-
-A comunicação eficiente com servidores remotos é um pilar fundamental no desenvolvimento de aplicativos React Native modernos. Seja para exibir dados dinâmicos, autenticar usuários ou interagir com APIs complexas, a capacidade de realizar requisições HTTP de forma robusta e otimizada é crucial.
-
-Este guia detalhado explora as duas principais ferramentas para conexão remota no React Native: a API Fetch, nativa do JavaScript, e a biblioteca Axios, uma alternativa popular com funcionalidades avançadas. Abordaremos desde os conceitos básicos até técnicas avançadas, com exemplos práticos e explicações aprofundadas sobre arquitetura REST, tratamento de respostas, configuração de requisições, autenticação e muito mais.
-
 ### Parte 13: Introdução Detalhada à Arquitetura Offline First
 
-A arquitetura Offline First (Primeiro Offline) é um padrão de design de software que prioriza a disponibilidade e a funcionalidade de um aplicativo, mesmo quando o dispositivo não está conectado à internet. Em vez de depender exclusivamente de uma conexão online, o aplicativo armazena dados e lógica localmente, permitindo que o usuário continue a interagir com o aplicativo e realizar ações, mesmo sem internet.
+Um usuário ao usar um aplicativo pode se encontrar em algumas dessas situações:
+
+*  Largura de banda de Internet limitada.
+*  Interrupções de conexão temporárias, como ao entrar em um elevador ou túnel.
+*  Acesso a dados ocasional, por exemplo, em tablets que operam somente em rede Wi-Fi.
+
+Algumas aplicativos, a depender do problema que eles solucionam, não precisam estar conectados de forma ininterrúptas. Neste caso é possível aplicar a arquitetura __Offline First__ (_Primeiro Offline_). 
+Em vez de depender continuamente de uma conexão online, o aplicativo entra num ciclo em que persiste os dados e continua processando de acordo com eles, permitindo a continuidade da interação do usuário com o aplicativo sem que haja interrupções. É claro que não estamos falando de uma tranmissão, reunião, ou aplicativos de banco e outros.
 
 **Fluxo de Funcionamento:**
 
-1.  **Inicialização:** Ao iniciar o aplicativo, ele verifica se há dados armazenados localmente. Se houver, o aplicativo exibe esses dados para o usuário, proporcionando uma experiência imediata e sem interrupções.
+Considerando que um aplicativo exibe uma lista de registros:
 
-2.  **Sincronização:** Em segundo plano, o aplicativo tenta sincronizar os dados locais com o servidor remoto. Se a conexão estiver disponível, o aplicativo envia as alterações locais para o servidor e recebe as atualizações do servidor.
+1.  **Inicialização:** O aplicativo verifica, inicialmente, se há dados armazenados localmente. Se houver, o aplicativo mostra os dados para o usuário, dando-lhe uma experiência imediata e sem interrupções.
 
-3.  **Operações Offline:** O usuário pode continuar a interagir com o aplicativo e realizar operações, mesmo sem conexão. As alterações feitas offline são armazenadas localmente.
+2.  **Sincronização:** Em seguida, o app verifica a conexão com internet e tenta sincronizar os dados locais com o servidor remoto. "Sincronizar" significa dizer que o aplicativo envia as alterações locais para o servidor (eventos) e recebe os dados já atualizados do servidor.
 
-4.  **Sincronização Posterior:** Quando a conexão é restabelecida, o aplicativo sincroniza as alterações locais com o servidor, garantindo que os dados estejam sempre atualizados em todos os dispositivos.
+3.  **Eventos em Offline:** Quando offline, o app amrazena os eventos no banco de dados e permanece verificando a conexão com a rede. E o fluxo reinicia.
 
-**Vantagens da Arquitetura Offline First:**
-
-*   **Disponibilidade:** O aplicativo funciona mesmo sem internet, permitindo que o usuário acesse informações e realize tarefas a qualquer momento e lugar.
-*   **Velocidade:** O carregamento de dados locais é muito mais rápido do que o carregamento de dados remotos, proporcionando uma experiência de usuário mais ágil e responsiva.
-*   **Confiabilidade:** O aplicativo não depende de uma conexão constante com a internet, tornando-o mais confiável em áreas com cobertura instável ou inexistente.
-*   **Experiência do Usuário Aprimorada:** A combinação de disponibilidade, velocidade e confiabilidade resulta em uma experiência de usuário mais satisfatória e envolvente.
+O aplicativo funciona sem interrupção, ainda que não esteja conectado. O carregamento de dados num banco de dados embarcado é muito mais rápido do que no remoto, a aplicação se torna mais ágil e responsiva. O app mais confiável em áreas com cobertura instável ou inexistente.
 
 **Desafios da Arquitetura Offline First:**
 
