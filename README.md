@@ -977,20 +977,12 @@ Considerando que um aplicativo exibe uma lista de registros:
 
 O aplicativo funciona sem interrupção, ainda que não esteja conectado. O carregamento de dados num banco de dados embarcado é muito mais rápido do que no remoto, a aplicação se torna mais ágil e responsiva. O app mais confiável em áreas com cobertura instável ou inexistente.
 
-**Desafios da Arquitetura Offline First:**
 
-*   **Complexidade:** Implementar a sincronização de dados, o tratamento de conflitos e a consistência dos dados pode ser complexo.
-*   **Gerenciamento de Dados:** É preciso definir uma estratégia para armazenar dados localmente, seja em um banco de dados local (como SQLite ou Realm) ou em arquivos.
-*   **Conflitos de Sincronização:** Podem ocorrer conflitos quando o usuário faz alterações offline e o servidor também faz alterações nos mesmos dados. É preciso implementar mecanismos para resolver esses conflitos de forma adequada.
 
-**Exemplo de Fluxo Offline First:**
+**Complexidades da Arquitetura Offline First:**
 
-1.  O usuário abre o aplicativo e vê os dados armazenados localmente.
-2.  O aplicativo verifica a conexão com a internet.
-3.  Se houver conexão, o aplicativo sincroniza os dados locais com o servidor.
-4.  O usuário faz alterações nos dados.
-5.  As alterações são armazenadas localmente.
-6.  Quando a conexão é restabelecida, as alterações locais são enviadas para o servidor.
+Já sabe-se que Offline First não deve ser aplicada em todas as soluções. Isso deve ser definido antes da faze de desevnvolvimento. Para que não haja incoerências especialmente em app multiusuários. Então deve-se levar em conta a complexidade da persistência e sincronização de dados, o tratamento de conflitos para manter a consistência dos dados de acordo com seus titulares. E por fim a concorrência no sistema.
+
 
 ### Parte 14: Interfaces Gráficas Otimistas e a Experiência do Usuário
 
@@ -1028,11 +1020,6 @@ Ao combinar a arquitetura Offline First com a interface gráfica otimista, você
 
 Lembre-se de que a implementação da arquitetura Offline First e da interface gráfica otimista requer planejamento cuidadoso e atenção aos detalhes. É importante considerar os desafios e as melhores práticas para garantir que seu aplicativo ofereça uma experiência de usuário consistente e de alta qualidade.
 
-## Conexão Remota com React Native: Um Guia Abrangente Utilizando Fetch e Axios
-
-A comunicação eficiente com servidores remotos é um pilar fundamental no desenvolvimento de aplicativos React Native modernos. Seja para exibir dados dinâmicos, autenticar usuários ou interagir com APIs complexas, a capacidade de realizar requisições HTTP de forma robusta e otimizada é crucial.
-
-Este guia detalhado explora as duas principais ferramentas para conexão remota no React Native: a API Fetch, nativa do JavaScript, e a biblioteca Axios, uma alternativa popular com funcionalidades avançadas. Abordaremos desde os conceitos básicos até técnicas avançadas, com exemplos práticos e explicações aprofundadas sobre arquitetura REST, tratamento de respostas, configuração de requisições, autenticação e muito mais.
 
 ### Parte 17: Verificando o Estado da Rede com NetInfo
 
