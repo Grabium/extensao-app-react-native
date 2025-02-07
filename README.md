@@ -950,7 +950,7 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
     fontSize: 
-
+```
 
 ## Conexão Remota com React Native: Um Guia Abrangente Utilizando Fetch e Axios
 
