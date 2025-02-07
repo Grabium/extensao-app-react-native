@@ -984,46 +984,8 @@ O aplicativo funciona sem interrupção, ainda que não esteja conectado. O carr
 Já sabe-se que Offline First não deve ser aplicada em todas as soluções. Isso deve ser definido antes da faze de desevnvolvimento. Para que não haja incoerências especialmente em app multiusuários. Então deve-se levar em conta a complexidade da persistência e sincronização de dados, o tratamento de conflitos para manter a consistência dos dados de acordo com seus titulares. E por fim a concorrência no sistema.
 
 
-### Parte 14: Interfaces Gráficas Otimistas e a Experiência do Usuário
-
-Em aplicativos Offline First, a interface gráfica otimista (optimistic UI) desempenha um papel crucial na melhoria da experiência do usuário. A ideia por trás da interface otimista é fornecer feedback visual imediato ao usuário sobre suas ações, mesmo antes de a operação ser confirmada pelo servidor.
-
-**Como Funciona:**
-
-1.  O usuário realiza uma ação (ex: adicionar um item ao carrinho).
-2.  O aplicativo atualiza a interface imediatamente, como se a ação tivesse sido bem-sucedida.
-3.  Em segundo plano, o aplicativo envia a requisição para o servidor.
-4.  Se a requisição for bem-sucedida, a interface permanece como está.
-5.  Se a requisição falhar, o aplicativo desfaz a alteração otimista e exibe uma mensagem de erro.
-
-**Vantagens da Interface Gráfica Otimista:**
-
-*   **Sensação de Velocidade:** O usuário tem a impressão de que o aplicativo é mais rápido, pois não precisa esperar pela confirmação do servidor para ver o resultado de suas ações.
-*   **Interatividade:** O usuário pode continuar a interagir com o aplicativo sem interrupções, mesmo durante as requisições em segundo plano.
-*   **Experiência do Usuário Aprimorada:** A combinação de velocidade e interatividade resulta em uma experiência de usuário mais fluida e responsiva.
-
-**Exemplo:**
-
-Imagine um aplicativo de lista de tarefas. O usuário adiciona uma nova tarefa à lista. Com a interface otimista, a tarefa aparece instantaneamente na lista, sem que o usuário precise esperar pela resposta do servidor. Se a requisição para adicionar a tarefa falhar, a tarefa é removida da lista e o usuário é notificado sobre o erro.
-
-**Como a Interface Gráfica Otimista se Encaixa na Arquitetura Offline First:**
-
-A interface gráfica otimista é especialmente útil em aplicativos Offline First, pois permite que o usuário continue a interagir com o aplicativo e realizar ações, mesmo sem conexão com a internet. As alterações feitas offline são exibidas imediatamente na interface, proporcionando uma sensação de velocidade e interatividade, mesmo quando o usuário não pode se comunicar com o servidor.
-
-**Considerações Importantes:**
-
-*   **Tratamento de Erros:** É fundamental implementar um tratamento de erros robusto para lidar com requisições que falham. O usuário deve ser notificado sobre o erro e ter a opção de tentar novamente ou desfazer a alteração.
-*   **Consistência de Dados:** É preciso garantir que os dados exibidos na interface otimista sejam consistentes com os dados que serão sincronizados com o servidor quando a conexão for restabelecida.
-*   **Complexidade:** Implementar a interface gráfica otimista pode adicionar complexidade ao código, pois é preciso lidar com diferentes cenários de sucesso e falha nas requisições.
-
-Ao combinar a arquitetura Offline First com a interface gráfica otimista, você pode criar aplicativos React Native que oferecem uma experiência de usuário excepcional, mesmo em condições de conectividade desafiadoras. A disponibilidade, a velocidade e a interatividade proporcionadas por essas técnicas resultam em aplicativos mais confiáveis, responsivos e agradáveis de usar.
-
-Lembre-se de que a implementação da arquitetura Offline First e da interface gráfica otimista requer planejamento cuidadoso e atenção aos detalhes. É importante considerar os desafios e as melhores práticas para garantir que seu aplicativo ofereça uma experiência de usuário consistente e de alta qualidade.
-
 
 ### Parte 17: Verificando o Estado da Rede com NetInfo
-
-A biblioteca `@react-native-community/netinfo` permite obter informações sobre o estado da rede do dispositivo, como o tipo de conexão (Wi-Fi, celular, etc.) e se há conexão disponível ou não.
 
 **Instalação:**
 
