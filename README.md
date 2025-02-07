@@ -139,6 +139,17 @@ O servidor responde à requisição com um código de status indicando o andamen
 *   **5xx (Erro do Servidor):**
     *   500 (Erro Interno do Servidor): Erro genérico no servidor.
     *   503 (Serviço Indisponível): Servidor temporariamente indisponível.
+
+## HTTP é Stateless
+
+Falamos muitoo sobre a estrutura de uma requisição. Mas agora vamos entender uma característica importante do comportamento. Dizer que HTTP é stateless significa que o servidor não mantém informações sobre as requisições anteriores que o cliente, em nosso caso é o aplicativo, fez. O app envia uma requisição para o servidor (ex: um app que consome um serviço de uma pizzaria que entrega em domicílio envia um comando correspondente à "busque uma lista de opções de pizzas para inserir no pedido") que a processa e responde (ex: um array de objetos correspondente às pizzas). Caso o mesmo dispositivo e app repita a requisição (ex: um botão de refresh), espera-se que o servidor processe como que a primeira não tivesse existido.
+Isso vai resultar em:
+*  Necessidade do uso de identificação de usuário nas requisições.
+*  Classificação das requisições em __idempotente__ ou ___não idempotente__
+
+Entendendo o conceito de "estado"
+
+Em sistemas de computação, o "estado" se refere à capacidade de um sistema lembrar de informações sobre interações passadas. Um sistema com estado armazena dados sobre as requisições anteriores e os utiliza para influenciar o comportamento em requisições futuras.
  
 ## Programação Assíncrona em JavaScript: Uma Abordagem Abrangente com Async/Await e Tratamento de Erros
 
@@ -790,54 +801,41 @@ deletarUsuario(123);
 
 *   Acima, o código mostra um tratamento de erros mais robusto que os exemplos anteriores. Ele diferencia os tipos de erros do mais específico ao mais genérico e exibe informações para depuração.
 
-### Parte 8: Enviando uma Chave Criptografada para uma API
+### Parte 8: Enviando uma Chave de Autorização para uma API
 
-Em cenários de desenvolvimento onde a segurança do app é primordial, pode ser que a API exija uma chave criptografada para autenticação. A criptografia garante que apenas o servidor, que possui a chave de descriptografia, acesse essas informações.
+Em cenários de desenvolvimento onde a segurança do app é primordial, pode ser que a API exija uma chave criptografada para autenticação fornecida pela mesma. A criptografia garante que apenas o servidor, que possui a chave de descriptografia, acesse essas informações. Não estamos falando de autenticação de usuários neste caso. Algumas APIs solicitam a inscrição do desenvolvedor onde este recebe, por email, uma chave criptografada que o identifica. Para requisitar serviços, basta inserir esta chave na requisição. Isso identifica o __desenvolvedor__, não o __usuário__. Como a chave será enviada em todas as requisições, isso a torna uma configuração que deve ser definida na instância única de axios.
 
 **Exemplo com Axios:**
 
+_/axiosServiceInstance.js_
 ```javascript
 import axios from 'axios';
-import CryptoJS from 'crypto-js'; // Biblioteca de criptografia (ex: CryptoJS)
 
-const enviarChaveCriptografada = async (chave) => {
-  try {
-    const chaveCriptografada = CryptoJS.AES.encrypt(chave, 'chave_secreta').toString(); // Criptografa a chave
+const api = axios.create({
+  baseURL: 'https://api.exemplo.com/api/',          // URL base da sua API
+  headers: {
+            'Content-Type': 'application/json',
+            'Authorizationh': 'a1b2c3d4e5f6g7h8'
+           }   
 
-    const response = await axios.post('https://api.exemplo.com/rota_protegida', {
-      chave: chaveCriptografada // Envia a chave criptografada no corpo da requisição
-    });
-
-    console.log("Resposta da API:", response.data);
-  } catch (error) {
-    console.error("Erro ao enviar chave criptografada:", error);
-  }
-};
-
-// Exemplo de uso:
-enviarChaveCriptografada('minha_chave_secreta');
+export default api;
 ```
 
-**Explicação:**
+### Parte 9: Seção e Bearer Token:
 
-1.  **Importações:** Importamos o Axios e uma biblioteca de criptografia, como o CryptoJS.
-2.  **`enviarChaveCriptografada`:** Função assíncrona que recebe a chave a ser criptografada.
-3.  **Criptografia:**
-    *   Utilizamos `CryptoJS.AES.encrypt()` para criptografar a chave usando um segredo (`'chave_secreta'`).
-    *   A chave criptografada é convertida para uma string com `.toString()`.
-4.  **Requisição POST:**
-    *   Enviamos a chave criptografada no corpo da requisição para a rota protegida.
-5.  **Tratamento de Erros:** Lida com erros na requisição.
-
-**Observações:**
-
-*   Substitua `'chave_secreta'` por um segredo forte e seguro, que deve ser conhecido apenas pelo cliente e pelo servidor.
-*   A API deve descriptografar a chave no servidor para utilizá-la.
-*   Existem diversas bibliotecas de criptografia disponíveis, como CryptoJS, Stanford Javascript Crypto Library (SJCL) e outras. Escolha a que melhor se adapta às suas necessidades.
+Como dito na introdução, HTTP é stateless
 
 ### Parte 9: Enviando um Bearer Token para uma Rota Protegida
 
+HTTP não salva estado entre mensagens. 
 O Bearer Token é um método de autenticação amplamente utilizado em APIs REST. Ele consiste em um token (geralmente um JWT - JSON Web Token) que é enviado no cabeçalho da requisição para comprovar a identidade do usuário.
+
+Bearer Token é uma forma de autenticar titulares (usuário). Segue o fluxo:
+*   O usuário envia as credencias após cadastrado;
+*   Servidor valida, autentica, e define a autorização;
+*   Servidor persiste uma chave criptografada segundo o algoritmo escolhido contendo as informações definidas sobre o titular;
+*   Servidor envia a chave que deve receber do usuário nas próximas requisições;
+*   App agora possui o token com a autorização de acesso adequada ao usuário. 
 
 **Exemplo com Axios:**
 
