@@ -144,13 +144,18 @@ O servidor responde à requisição com um código de status indicando o andamen
 
 Falamos muitoo sobre a estrutura de uma requisição. Mas agora vamos entender uma característica importante do comportamento. Dizer que HTTP é stateless significa que o servidor não mantém informações sobre as requisições anteriores que o cliente, em nosso caso é o aplicativo, fez. O app envia uma requisição para o servidor (ex: um app que consome um serviço de uma pizzaria que entrega em domicílio envia um comando correspondente à "busque uma lista de opções de pizzas para inserir no pedido") que a processa e responde (ex: um array de objetos correspondente às pizzas). Caso o mesmo dispositivo e app repita a requisição (ex: um botão de refresh), espera-se que o servidor processe como que a primeira não tivesse existido.
 Isso vai resultar em:
+*  Classificação das requisições em __idempotente__ e __não idempotente__
 *  Necessidade do uso de identificação de usuário nas requisições.
-*  Classificação das requisições em __idempotente__ ou ___não idempotente__
 
-Entendendo o conceito de "estado"
+### Requisição com Método Idempotente:
+É aquela que se reenviada, não altera o estado do servidor. Com "estado" aqui se quer dizer "dados persistidos".
+São estes: GET, PUT, DELETE.
+Cada vez que se solicita um DELETE do mesmo recurso, a partir da segunda tentativa haverá o lançamento de excesão no servidor porquê não dá para excluir o mesmo registro duas ou mais vezes. No caso de repetir uma mesma requisição GET, obviamente, só busca recurso para exibição. E por fim, PUT apenas alteraria o registro para o mesmo estado em que já se encontra.
 
-Em sistemas de computação, o "estado" se refere à capacidade de um sistema lembrar de informações sobre interações passadas. Um sistema com estado armazena dados sobre as requisições anteriores e os utiliza para influenciar o comportamento em requisições futuras.
- 
+POST não é idempotente. Caso uma mesma requisição para criação de um novo registro se repita, um banco de dados pode simplesmente atender a solicitação. Isso resulta em duplicidade de dados, embora não seriam o mesmo índice dentro do banco. É claro que é comum os sistemas serem programados para evitar isso, dependendo das regras de negócio.
+
+Existem outros métodos de requisição: HEAD, OPTIONS e TRADE - que são idempotentes. E PATCH que não é idempotente.
+
 ## Programação Assíncrona em JavaScript: Uma Abordagem Abrangente com Async/Await e Tratamento de Erros
 
 Antes de segir-mos com exemplos de requisições, é necessário explanar um pouco sobre o processo assíncrono do javascript já que ele marca grande presença quando se trata de processos que podem demorar indefinidamente ou retornar um erro. 
