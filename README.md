@@ -970,7 +970,7 @@ Em vez de depender continuamente de uma conexão online, o aplicativo entra num 
 Considerando que um aplicativo exibe uma lista de registros:
 
 1.  **Inicialização:** O aplicativo verifica, inicialmente, se há dados armazenados localmente. Se houver, o aplicativo mostra os dados para o usuário, dando-lhe uma experiência imediata e sem interrupções.
-
+            
 2.  **Sincronização:** Em seguida, o app verifica a conexão com internet e tenta sincronizar os dados locais com o servidor remoto. "Sincronizar" significa dizer que o aplicativo envia as alterações locais para o servidor (eventos) e recebe os dados já atualizados do servidor.
 
 3.  **Eventos em Offline:** Quando offline, o app amrazena os eventos no banco de dados e permanece verificando a conexão com a rede. E o fluxo reinicia.
@@ -981,8 +981,114 @@ O aplicativo funciona sem interrupção, ainda que não esteja conectado. O carr
 
 **Complexidades da Arquitetura Offline First:**
 
-Já sabe-se que Offline First não deve ser aplicada em todas as soluções. Isso deve ser definido antes da faze de desevnvolvimento. Para que não haja incoerências especialmente em app multiusuários. Então deve-se levar em conta a complexidade da persistência e sincronização de dados, o tratamento de conflitos para manter a consistência dos dados de acordo com seus titulares. E por fim a concorrência no sistema.
+Já sabe-se que Offline First (OF) não deve ser aplicada em todas as soluções. Isso deve ser definido antes da faze de desevnvolvimento. Para que não haja incoerências especialmente em app multiusuários. Então deve-se levar em conta a complexidade da persistência e sincronização de dados, o tratamento de conflitos para manter a consistência dos dados de acordo com seus titulares. E por fim a concorrência no sistema.
 
+## Arquitetura Offline First aplicada em Redux
+
+A missão aqui não é detalhar sobre Redux, pois isso fugira do escopo. Mas com um breve resumo poderemos entender melhor a camada onde OF será aplicada.
+
+**As 4 camadas da Arquitetura Redux**
+
+1. **Store (Armazém):** É um objeto que contém o estado global da aplicação. Possui a instância da DAO da entidade envolvida na requisição.
+
+2. **Actions (Ações):** Encapsula as chamadas que vão disparar as funcionallidades em Store.
+
+3. **Reducers (Redutores):** São funções que recebem o estado atual e uma Action, e retornam um novo estado. Eles são os responsáveis por "como" o estado deve ser alterado, baseados na Action recebida.
+   
+5. **View:** São as telas onde o usuário dispara eventos inscritos em Actions.
+
+**Fluxo de Dados Unidirecional**
+
+A arquitetura Redux garante um fluxo de dados unidirecional, o que significa que as informações sempre fluem em uma única direção:
+
+1. O usuário interage com um Componente (na View).
+2. O Componente despacha uma Action para o Store.
+3. O Store envia a Action para todos os Reducers.
+4. Os Reducers processam a Action e retornam um novo estado.
+5. O Store é atualizado com o novo estado.
+6. Os Componentes são notificados da mudança e se atualizam.
+
+**Implementação**
+
+Como já entendido, implementar OF significa que deverá ser implementada também toda a arquitetura para persistência de dados em banco de dados embarcado. Para isso é necessário implementar uma ORM (Mapeamento Objeto Relacional), responsável por representar os dados a serem manipulados, e a DAO (_Data acces Object_) da entidade em questão. É recomendável definir um gerenciador de estado centralizado em Store. Por esses motivos, OF é facilmente encaixada na arquitetura orientada a eventos Redux.
+
+Vamos ao exemlo clássico de cadastro de usuários. O usuário preenche um formulário com seus dados e, ao clicar em "Salvar", esses dados precisam ser enviados para o servidor através de uma requisição POST. Considerando que na engenharia de requisitos foi determinado que é possível tolerar um certo atraso no cadastro e que isso não trará danos aos usuários. Então, em acordo, foi determinado que seria aplicada a arquitetura OF. Boltando a olhar o Redux, como visto antes, OF começa a atuar na camada __Actions__. 
+
+No exemplo abaixo, uma ação é definida. Mas devemos nos atentar aos metadados __commit__ e __rollback__, que poem em ação uma funcionalidade para cada estado da conexão (disponível e não disponível) com a API.
+
+**Código:**
+
+_UserActions.js_
+```javascript
+// actions.js
+export const registerUser = (userData) => ({
+  type: 'REGISTER_USER',
+  payload: { userData },
+  meta: {
+    offline: {
+      effect: {
+        url: '/api/users',
+        method: 'POST',
+        json: userData,
+      },
+      commit: { type: 'REGISTER_USER_COMMIT', meta {userData}},
+      rollback: { type: 'REGISTER_USER_ROLLBACK', meta {userData}},
+    },
+  },
+});
+
+// reducer.js
+const initialState = {
+  users: [],
+  loading: false,
+  error: null,
+};
+
+const usersReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'REGISTER_USER':
+      return { ...state, loading: true, error: null };
+    case 'REGISTER_USER_COMMIT':
+      return { ...state, loading: false }; // Limpa o loading após o sucesso
+    case 'REGISTER_USER_ROLLBACK':
+      return { ...state, loading: false, error: action.payload }; // Define o erro
+    default:
+      return state;
+  }
+};
+
+export default usersReducer;
+```
+
+**Explicação:**
+
+1. **`registerUser(userData)`:**
+   - Recebe os dados do usuário (`userData`) como argumento.
+   - Define o tipo da action como `REGISTER_USER`.
+   - Inclui os dados do usuário no payload da action.
+   - Utiliza a meta propriedade `offline` do Redux Offline para configurar a requisição POST:
+     - `effect`: Define a URL (`/api/users`), o método HTTP (`POST`) e os dados a serem enviados (`userData`).
+     - `commit`: Define a action a ser despachada após a requisição POST bem-sucedida (`REGISTER_USER_COMMIT`).
+     - `rollback`: Define a action a ser despachada caso a requisição POST falhe (`REGISTER_USER_ROLLBACK`).
+
+2. **`usersReducer`:**
+   - Lida com a action `REGISTER_USER`:
+     - Define `loading` como `true` para indicar que a requisição está em andamento.
+     - Limpa qualquer erro anterior.
+   - Lida com a action `REGISTER_USER_COMMIT`:
+     - Define `loading` como `false` para indicar que a requisição foi concluída com sucesso.
+   - Lida com a action `REGISTER_USER_ROLLBACK`:
+     - Define `loading` como `false` para indicar que a requisição falhou.
+     - Define `error` com o payload da action, que deve conter informações sobre o erro.
+
+**Observações:**
+
+- Este exemplo demonstra como usar o Redux Offline para disparar uma requisição POST para um servidor remoto.
+- A action `REGISTER_USER_COMMIT` é uma ação de "commit" que pode ser usada para realizar ações adicionais após a requisição bem-sucedida, como redirecionar o usuário para outra página ou exibir uma mensagem de sucesso.
+- A action `REGISTER_USER_ROLLBACK` é uma ação de "rollback" que pode ser usada para lidar com erros na requisição, como exibir uma mensagem de erro para o usuário ou permitir que ele tente novamente.
+- Este é apenas um exemplo básico. Em um aplicativo real, você pode precisar de actions e reducers mais complexos para lidar com diferentes cenários e tipos de dados.
+
+Espero que este exemplo seja útil para você! Se tiver alguma dúvida, não hesite em perguntar.
 
 
 ### Parte 17: Verificando o Estado da Rede com NetInfo
@@ -1127,3 +1233,149 @@ const sincronizarDadosRemotamente = async () => {
 Com estes exemplos, você aprendeu como usar a biblioteca NetInfo para verificar o estado da rede, detectar mudanças na conexão e iniciar processos de persistência local e sincronização remota de dados. Essa é uma base sólida para construir aplicativos React Native robustos e eficientes, que funcionam mesmo quando o dispositivo está offline.
 
 Lembre-se de que a implementação de funcionalidades offline-first requer planejamento cuidadoso e atenção aos detalhes. É importante considerar os desafios e as melhores práticas para garantir que seu aplicativo ofereça uma experiência de usuário consistente e de alta qualidade, independentemente do estado da conexão.
+
+**Redux-Offline:**
+
+## Persistência Remota de Dados com Redux Actions em React Native
+
+
+
+### Configuração do Ambiente
+
+Offline First é facilmente aplicado em arquitetura Redux. Esta, por sua vez, é orientada a eventos.
+
+1. **Crie os arquivos:**
+
+* `actions.js`: Contém as definições das actions do Redux.
+* `reducer.js`: Contém o reducer do Redux que lida com as actions.
+* `store.js`: Configura a store do Redux.
+* `api.js`: Contém a lógica para comunicação com a API remota.
+
+### Definição das Actions
+
+_actions.js_
+```javascript
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import * as api from './api';
+
+// Action para salvar dados remotamente
+export const saveDataRemote = createAsyncThunk(
+  'data/saveRemote',
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await api.saveData(data);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+// Action para lidar com o rollback em caso de falha na persistência remota
+export const rollbackData = (data) => ({
+  type: 'data/rollback',
+  payload: data,
+});
+```
+
+### Implementação do Reducer
+
+```javascript
+// reducer.js
+const initialState = {
+  data: null,
+  loading: false,
+  error: null,
+};
+
+const reducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'data/saveRemote/pending':
+      return { ...state, loading: true, error: null };
+    case 'data/saveRemote/fulfilled':
+      return { ...state, data: action.payload, loading: false };
+    case 'data/saveRemote/rejected':
+      return { ...state, loading: false, error: action.payload };
+    case 'data/rollback':
+      return { ...state, data: action.payload, loading: false };
+    default:
+      return state;
+  }
+};
+
+export default reducer;
+```
+
+### Configuração da Store
+
+```javascript
+// store.js
+import { configureStore } from '@reduxjs/toolkit';
+import reducer from './reducer';
+
+const store = configureStore({
+  reducer,
+});
+
+export default store;
+```
+
+### Lógica da API
+
+```javascript
+// api.js
+import axios from 'axios';
+
+const API_URL = 'https://seu-servidor-remoto.com/api';
+
+export const saveData = async (data) => {
+  return await axios.post(`${API_URL}/data`, data);
+};
+```
+
+### Utilização no Componente
+
+```javascript
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveDataRemote, rollbackData } from './actions';
+
+const MyComponent = () => {
+  const dispatch = useDispatch();
+  const { data, loading, error } = useSelector((state) => state.data);
+
+  const handleSaveData = (dataToSave) => {
+    dispatch(saveDataRemote(dataToSave))
+      .unwrap()
+      .catch((error) => {
+        // Falha na persistência remota, executa o rollback
+        dispatch(rollbackData(dataToSave));
+        console.error('Erro ao salvar dados remotamente:', error);
+      });
+  };
+
+  return (
+    // ... JSX do seu componente ...
+  );
+};
+
+export default MyComponent;
+```
+
+### Explicação do Código
+
+* **`createAsyncThunk`**: Utilizado para criar actions assíncronas, como a chamada à API remota.
+* **`saveDataRemote`**: Action que envia os dados para a API remota.
+* **`rollbackData`**: Action que define o estado da aplicação para o valor anterior em caso de falha na persistência remota.
+* **`reducer`**: Lida com as actions, atualizando o estado da aplicação.
+* **`api.js`**: Contém a função `saveData` que faz a chamada à API remota utilizando `axios`.
+* **`MyComponent`**: Exemplo de como usar as actions no componente, incluindo o tratamento de erros e o rollback.
+
+### Observações
+
+* Este é um exemplo básico de como implementar a persistência remota de dados com Redux Actions em React Native.
+* A lógica de rollback pode ser adaptada para diferentes cenários, como exibir uma mensagem de erro para o usuário ou armazenar os dados localmente para sincronização posterior.
+* É importante implementar medidas de segurança adequadas para proteger os dados transmitidos para a API remota.
+
+Espero que este guia completo seja útil para você! Se tiver alguma dúvida, não hesite em perguntar.
+
