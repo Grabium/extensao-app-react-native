@@ -1020,24 +1020,35 @@ No exemplo abaixo, uma ação é definida. Mas devemos nos atentar aos metadados
 
 _UserActions.js_
 ```javascript
-// actions.js
-export const registerUser = (userData) => ({
+export default const registerUser = (userData) => ({
   type: 'REGISTER_USER',
   payload: { userData },
   meta: {
-    offline: {
-      effect: {
+    offline: {   
+      effect: {                 //dispara a tentativa de envio da requisição.
         url: '/api/users',
         method: 'POST',
         json: userData,
       },
-      commit: { type: 'REGISTER_USER_COMMIT', meta {userData}},
-      rollback: { type: 'REGISTER_USER_ROLLBACK', meta {userData}},
+      commit: { type: 'REGISTER_USER_COMMIT', meta: {userData}},    //Sucesso. Agora persiste no DB local.
+      rollback: { type: 'REGISTER_USER_ROLLBACK', meta: {userData}},    //Falha. Vai ficar no DB para uma sincronização futura.
     },
   },
 });
+```
 
-// reducer.js
+1. **`registerUser(userData)`:**
+   - Recebe os dados do usuário (`userData`) como argumento.
+   - Define o tipo da action como `REGISTER_USER`.
+   - Inclui os dados do usuário no payload da action.
+   - Utiliza a meta propriedade `offline` do Redux Offline para configurar a requisição POST:
+     - `effect`: Define a URL (`/api/users`), o método HTTP (`POST`) e os dados a serem enviados (`userData`).
+     - `commit`: Define a action a ser despachada após a requisição POST bem-sucedida (`REGISTER_USER_COMMIT`).
+     - `rollback`: Define a action a ser despachada caso a requisição POST falhe (`REGISTER_USER_ROLLBACK`).
+
+
+reducer.js_
+```javascript
 const initialState = {
   users: [],
   loading: false,
@@ -1060,35 +1071,19 @@ const usersReducer = (state = initialState, action) => {
 export default usersReducer;
 ```
 
-**Explicação:**
-
-1. **`registerUser(userData)`:**
-   - Recebe os dados do usuário (`userData`) como argumento.
-   - Define o tipo da action como `REGISTER_USER`.
-   - Inclui os dados do usuário no payload da action.
-   - Utiliza a meta propriedade `offline` do Redux Offline para configurar a requisição POST:
-     - `effect`: Define a URL (`/api/users`), o método HTTP (`POST`) e os dados a serem enviados (`userData`).
-     - `commit`: Define a action a ser despachada após a requisição POST bem-sucedida (`REGISTER_USER_COMMIT`).
-     - `rollback`: Define a action a ser despachada caso a requisição POST falhe (`REGISTER_USER_ROLLBACK`).
-
 2. **`usersReducer`:**
-   - Lida com a action `REGISTER_USER`:
-     - Define `loading` como `true` para indicar que a requisição está em andamento.
-     - Limpa qualquer erro anterior.
-   - Lida com a action `REGISTER_USER_COMMIT`:
+   - Caso a action seja `REGISTER_USER`:
+     - __loading__ é uma flag que vai indicar que a requisição está em andamento. 
+     - __error: null__ Limpa qualquer erro anterior.
+     
+   - Caso a action seja `REGISTER_USER_COMMIT`:
      - Define `loading` como `false` para indicar que a requisição foi concluída com sucesso.
-   - Lida com a action `REGISTER_USER_ROLLBACK`:
-     - Define `loading` como `false` para indicar que a requisição falhou.
-     - Define `error` com o payload da action, que deve conter informações sobre o erro.
+     - Também deve ser usada para realizar outras ações adicionais após o sucesso da requisição. Especialmente chamar a exibição da tela ou parte dela com dados atualizados.
+   - Caso a action seja `REGISTER_USER_ROLLBACK`:
+     - __loading__ é uma flag que vai indicar que a requisição falhou. 
+     - Define __error__ com o payload da action, que deve possuir as informações sobre o erro.
+     - Além disso, pode chamar funcionalidades com exibir uma mensagem de erro para o usuário ou permitir que ele tente novamente.
 
-**Observações:**
-
-- Este exemplo demonstra como usar o Redux Offline para disparar uma requisição POST para um servidor remoto.
-- A action `REGISTER_USER_COMMIT` é uma ação de "commit" que pode ser usada para realizar ações adicionais após a requisição bem-sucedida, como redirecionar o usuário para outra página ou exibir uma mensagem de sucesso.
-- A action `REGISTER_USER_ROLLBACK` é uma ação de "rollback" que pode ser usada para lidar com erros na requisição, como exibir uma mensagem de erro para o usuário ou permitir que ele tente novamente.
-- Este é apenas um exemplo básico. Em um aplicativo real, você pode precisar de actions e reducers mais complexos para lidar com diferentes cenários e tipos de dados.
-
-Espero que este exemplo seja útil para você! Se tiver alguma dúvida, não hesite em perguntar.
 
 
 ### Parte 17: Verificando o Estado da Rede com NetInfo
