@@ -2,10 +2,7 @@
 # **Conexão Remota com React Native**
 
 ![](https://www.simplilearn.com/ice9/free_resources_article_thumb/React_Native_Tutorial.jpg)
-#
-
-
-#### Gabriel C. Azevedo
+### Gabriel C. Azevedo
 #
 #
 #
