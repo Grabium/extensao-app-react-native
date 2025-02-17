@@ -1,8 +1,8 @@
-#    Conexão Remota com React Native
+# Conexão Remota com React Native
 ![](https://www.simplilearn.com/ice9/free_resources_article_thumb/React_Native_Tutorial.jpg)
 ### Gabriel C. Azevedo
-
-
+# 
+# 
 É muito difícil qualquer aplicativo desenvolvido atualmente não fazer ao menos uma requisição a um serviço web. Muito comumente fará um login ou consumirá uma API para qualquer outro serviço. A exemplo temos: IoT, jogos, check-outs, transmissões ao vivo, sites, chats, e-mails e outros.
 
 Vamos explorar as duas principais ferramentas para conexão remota no React Native: a API Fetch, nativa do JavaScript, e a biblioteca Axios, bastante popular e avançada. Abordaremos desde os conceitos básicos até técnicas avançadas, com exemplos práticos e explicações aprofundadas sobre arquitetura REST, tratamento de respostas, configuração de requisições, autenticação e muito mais.
