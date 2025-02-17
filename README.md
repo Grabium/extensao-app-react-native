@@ -4,19 +4,13 @@
 #
 #
 #
-#
-#
-#
-#
-#
+
 
 
 
 ![](https://www.simplilearn.com/ice9/free_resources_article_thumb/React_Native_Tutorial.jpg)
 #
-#
-#
-#
+
 
 #### Gabriel C. Azevedo
 #
@@ -24,7 +18,7 @@
 #
 #
 #
-
+#
 
 
 É muito difícil qualquer aplicativo desenvolvido atualmente não fazer ao menos uma requisição a um serviço web. Muito comumente fará um login ou consumirá uma API para qualquer outro serviço. A exemplo temos: IoT, jogos, check-outs, transmissões ao vivo, sites, chats, e-mails e outros.
